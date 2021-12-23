@@ -4,6 +4,7 @@ import { User } from "./user.entity"
 import { CreateUserDto } from "./dtos/create-user.dto"
 import { UserRepository } from "./user.repository"
 import { UpdateUserDto } from "./dtos/update-user.dto"
+import { FindUserDto } from "../auth/dtos/find-user.dto"
 
 @Injectable()
 export class UserService {
@@ -11,6 +12,21 @@ export class UserService {
         @InjectRepository(UserRepository)
         private readonly userRepository: UserRepository
     ) {}
+
+    /**
+     * 查找用户
+     * @param userName
+     * @param passWord
+     */
+    async findUser(userName: string, passWord: string) {
+        try {
+            const result = await this.userRepository.findOne({ where: { userName, passWord } })
+            if (!result) throw new HttpException("暂未注册用户", HttpStatus.INTERNAL_SERVER_ERROR)
+            return result
+        } catch (e) {
+            throw new HttpException("发生未知错误", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 
     /**
      * 创建用户

@@ -1,36 +1,37 @@
-import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common"
-import { Repository } from "typeorm"
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
 import { User } from "../user/user.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { FindUserDto } from "./dtos/find-user.dto"
 import { ToolsService } from "../tools/tools.service"
+import { UserService } from "../user/user.service"
+import { JwtService } from "@nestjs/jwt"
 
 @Injectable()
 export class AuthService {
     constructor(
         @InjectRepository(User)
-        private readonly userRepository: Repository<User>,
-        private readonly toolsService: ToolsService
+        private readonly toolsService: ToolsService,
+        private readonly userService: UserService,
+        private readonly jwtService: JwtService
     ) {}
 
     //  验证码redis缓存前缀
     private readonly keyPrefix: string = "mathId"
 
     /**
-     * 查找用户
+     * 鉴权登录
      * @param findUserDto
      */
     async authLogin(findUserDto: FindUserDto) {
         const verifyResult = await this.toolsService.verifySvgCode(this.keyPrefix, findUserDto.mathId, findUserDto.mathText)
-        if (!verifyResult) throw new HttpException("验证码错误，请重试", HttpStatus.INTERNAL_SERVER_ERROR)
-        const result = await this.userRepository.findOne({
-            where: {
-                userName: findUserDto.userName,
-                passWord: findUserDto.passWord,
-            },
-        })
-        if (!result) throw new HttpException("暂未注册用户", HttpStatus.INTERNAL_SERVER_ERROR)
-        return { info: result }
+        if (!verifyResult) {
+            throw new HttpException("验证码错误，请重试", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+        const userInfo = await this.userService.findUser(findUserDto.userName, findUserDto.passWord)
+        const payload = { username: userInfo.userName, sub: userInfo.id, roleId: userInfo.roleId }
+        return {
+            accessToken: this.jwtService.sign(payload),
+        }
     }
 
     /**
