@@ -19,13 +19,11 @@ import { processChromeConole } from "./runtime.console"
 import { MOM_ENT } from "@/symbol/global"
 
 import QueryGroup from "@/components/QueryGroup/QueryGroup.vue"
-import FModal from "@/components/FModal/FModal.vue"
 
 // 路由实例
 import router from "@/router"
 
 function installGlobalComponents(app: any) {
-    // global components installs 
     app.component('QueryGroup', QueryGroup)
 }
 

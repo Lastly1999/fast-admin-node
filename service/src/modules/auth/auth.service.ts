@@ -11,7 +11,7 @@ export class AuthService {
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
         private readonly toolsService: ToolsService
-    ) {}
+    ) { }
 
     //  验证码redis缓存前缀
     private readonly keyPrefix: string = "mathId"
