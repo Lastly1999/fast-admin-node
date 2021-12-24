@@ -1,10 +1,10 @@
-import {RoleItem} from "@/store/modules/system"
+import { RoleItem } from "@/store/modules/system"
 
 export type LoginForm = {
     userName: string;
     passWord: string;
-    codeAuth: string;
-    code: string;
+    captchaCode: string;
+    captchaId: string;
 }
 
 export type UserInfo = {

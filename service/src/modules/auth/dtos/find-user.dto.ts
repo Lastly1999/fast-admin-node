@@ -8,8 +8,8 @@ export class FindUserDto {
     readonly passWord: string
 
     @IsNotEmpty({ message: "验证码id不能为空" })
-    readonly mathId: string
+    readonly captchaId: string
 
     @IsNotEmpty({ message: "验证码不能为空" })
-    readonly mathText: string
+    readonly captchaCode: string
 }

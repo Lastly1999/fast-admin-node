@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-import type {PropType} from "vue"
-import {ref} from 'vue'
-import type {LoginForm} from "@/services/model/response/role"
-import {ValidateErrorEntity} from 'ant-design-vue/es/form/interface'
+import type { PropType } from "vue"
+import { ref } from 'vue'
+import type { LoginForm } from "@/services/model/response/role"
+import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface'
 
 //components
-import {UserOutlined, LockOutlined} from '@ant-design/icons-vue'
+import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 
 
 export type AutCodeOptions = {
-    code: string;
-    codeBase: string;
+    cap: string;
+    captchaId: string;
 }
 
-defineProps({
+const props = defineProps({
     formLoading: {
         type: Boolean,
         default: () => false
@@ -22,8 +22,8 @@ defineProps({
         type: Object as PropType<AutCodeOptions>,
         default: () => {
             return {
-                code: "",
-                codeBase: ""
+                cap: "",
+                captchaId: ""
             }
         }
     }
@@ -38,31 +38,31 @@ const emit = defineEmits<{
 const loginForm = ref<LoginForm>({
     userName: "",
     passWord: "",
-    codeAuth: "",
-    code: ""
+    captchaId: "",
+    captchaCode: ""
 })
 
 const rules = {
     userName: [
-        {required: true, message: 'Please input UserName', trigger: 'blur'},
+        { required: true, message: 'Please input UserName', trigger: 'blur' },
     ],
     passWord: [
-        {required: true, message: 'Please input PassWord', trigger: 'blur'},
+        { required: true, message: 'Please input PassWord', trigger: 'blur' },
     ],
-    code: [
-        {required: true, message: 'Please input codeAuth', trigger: 'blur'},
+    captchaCode: [
+        { required: true, message: 'Please input codeAuth', trigger: 'blur' },
     ]
 };
 
 const onSubmit = () => {
     formRef.value
-    .validate()
-    .then(() => {
-        emit("change", loginForm.value);
-    })
-    .catch((error: ValidateErrorEntity<LoginForm>) => {
-        console.log('error', error);
-    });
+        .validate()
+        .then(() => {
+            emit("change", loginForm.value);
+        })
+        .catch((error: ValidateErrorEntity<LoginForm>) => {
+            console.log('error', error);
+        });
 
 }
 </script>
@@ -75,28 +75,38 @@ const onSubmit = () => {
             <a-form-item name="userName">
                 <a-input size="large" v-model:value="loginForm.userName" placeholder="userName">
                     <template #prefix>
-                        <UserOutlined style="color: rgba(0, 0, 0, 0.25)"/>
+                        <UserOutlined style="color: rgba(0, 0, 0, 0.25)" />
                     </template>
                 </a-input>
             </a-form-item>
             <a-form-item name="passWord">
-                <a-input size="large" v-model:value="loginForm.passWord" type="password" placeholder="Password">
+                <a-input
+                    size="large"
+                    v-model:value="loginForm.passWord"
+                    type="password"
+                    placeholder="Password"
+                >
                     <template #prefix>
-                        <LockOutlined style="color: rgba(0, 0, 0, 0.25)"/>
+                        <LockOutlined style="color: rgba(0, 0, 0, 0.25)" />
                     </template>
                 </a-input>
             </a-form-item>
             <a-form-item name="code">
                 <a-row>
                     <a-col :span="17">
-                        <a-input size="large" v-model:value="loginForm.code" placeholder="authCode">
+                        <a-input
+                            size="large"
+                            v-model:value="loginForm.captchaCode"
+                            placeholder="authCode"
+                        >
                             <template #prefix>
-                                <LockOutlined style="color: rgba(0, 0, 0, 0.25)"/>
+                                <LockOutlined style="color: rgba(0, 0, 0, 0.25)" />
                             </template>
                         </a-input>
                     </a-col>
                     <a-col :span="7">
-                        <img style="width:100%" :src="authCode.codeBase"/>
+                        <div v-html="authCode.cap"></div>
+                        <!-- <img style="width:100%" :src="authCode.codeBase"/> -->
                     </a-col>
                 </a-row>
             </a-form-item>
@@ -108,8 +118,7 @@ const onSubmit = () => {
                     size="large"
                     :loading="formLoading"
                     @click="onSubmit"
-                >Log in
-                </a-button>
+                >Log in</a-button>
             </a-form-item>
         </a-form>
     </div>

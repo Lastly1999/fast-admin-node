@@ -50,4 +50,16 @@ export class UserService {
         user.nikeName = updateUserDto.nikeName
         await this.userRepository.update(user, updateUserDto)
     }
+
+    /**
+     * 获取用户角色的ids列表
+     * @param id
+     */
+    async getUserRoles(id: string) {
+        try {
+            return await this.userRepository.findUserRoles(Number(id))
+        } catch (e) {
+            throw new HttpException("系统错误", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 }

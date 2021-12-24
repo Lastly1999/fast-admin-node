@@ -14,11 +14,11 @@
 
 </script>
 <template>
-<!--    <ConfigProvider :locale="lang">-->
-        <div id="app">
-            <router-view />
-        </div>
-<!--    </ConfigProvider>-->
+    <!--    <ConfigProvider :locale="lang">-->
+    <div id="app">
+        <router-view />
+    </div>
+    <!--    </ConfigProvider>-->
 </template>
 <style lang="scss">
 @import "App.scss";

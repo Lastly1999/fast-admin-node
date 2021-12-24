@@ -25,4 +25,14 @@ export class UserRepository extends Repository<User> {
         user.roles = roles
         return await this.manager.save(user)
     }
+
+    /**
+     * 查询用户的角色权限列表
+     * @param id
+     */
+    async findUserRoles(id: number) {
+        const createdBuilder = await this.manager.getRepository(User).createQueryBuilder("sys_users")
+        const allUseBuilder = createdBuilder.innerJoinAndSelect("sys_users.roles", "roles")
+        return await allUseBuilder.where("sys_users.id = :id", { id: id }).getOne()
+    }
 }

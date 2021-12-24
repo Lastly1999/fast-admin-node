@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import {onMounted, ref} from "vue"
-import {Store, useStore} from "vuex"
-import type {AutCodeOptions} from './components/LoginFormContainer/LoginFormContainer.vue'
+import { onMounted, ref } from "vue"
+import { Store, useStore } from "vuex"
+import type { AutCodeOptions } from './components/LoginFormContainer/LoginFormContainer.vue'
 import LoginFormContainer from './components/LoginFormContainer/LoginFormContainer.vue'
-import type {LoginForm} from '@/services/model/response/role'
+import type { LoginForm } from '@/services/model/response/role'
 
 // apis
-import {getImgsAuthCode} from "@/services/auth"
+import { getImgsAuthCode } from "@/services/auth"
 
 
 onMounted(() => {
@@ -22,7 +22,7 @@ const formLoading = ref<boolean>(false)
 const loginAction = async (form: LoginForm): Promise<any> => {
     formLoading.value = true
     try {
-        await store.dispatch("authModule/API_POST_SYS_AUTH", {...form, codeAuth: authCodeParams.value.code})
+        await store.dispatch("authModule/API_POST_SYS_AUTH", { ...form, captchaId: authCodeParams.value.captchaId })
     } catch {
         await getAuthImg()
     } finally {
@@ -32,18 +32,14 @@ const loginAction = async (form: LoginForm): Promise<any> => {
 
 // 图形验证码参数
 const authCodeParams = ref<AutCodeOptions>({
-    code: "",
-    codeBase: ""
+    cap: "",
+    captchaId: ""
 })
 
 // 获取图形验证码
 const getAuthImg = async () => {
-    const {code, data} = await getImgsAuthCode()
-    if (code === 200) {
-        authCodeParams.value = {
-            ...data
-        }
-    }
+    const { code, data } = await getImgsAuthCode()
+    if (code === 200) authCodeParams.value = { ...data }
 }
 
 </script>
@@ -51,15 +47,19 @@ const getAuthImg = async () => {
 <template>
     <div class="login-container">
         <div class="element-container-left">
-            <img src="@/assets/login/element1.png"/>
+            <img src="@/assets/login/element1.png" />
         </div>
         <div class="element-container-right">
-            <img src="@/assets/login/element2.png"/>
+            <img src="@/assets/login/element2.png" />
         </div>
-        <LoginFormContainer :formLoading="formLoading" :authCode="authCodeParams" @change="loginAction"/>
+        <LoginFormContainer
+            :formLoading="formLoading"
+            :authCode="authCodeParams"
+            @change="loginAction"
+        />
     </div>
 </template>
-
+ 
 <style lang="scss" scoped>
 @import "./index.scss";
 </style>

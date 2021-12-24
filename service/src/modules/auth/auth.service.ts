@@ -1,6 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
-import { User } from "../user/user.entity"
-import { InjectRepository } from "@nestjs/typeorm"
 import { FindUserDto } from "./dtos/find-user.dto"
 import { ToolsService } from "../tools/tools.service"
 import { UserService } from "../user/user.service"
@@ -8,12 +6,7 @@ import { JwtService } from "@nestjs/jwt"
 
 @Injectable()
 export class AuthService {
-    constructor(
-        @InjectRepository(User)
-        private readonly toolsService: ToolsService,
-        private readonly userService: UserService,
-        private readonly jwtService: JwtService
-    ) {}
+    constructor(private readonly toolsService: ToolsService, private readonly userService: UserService, private readonly jwtService: JwtService) {}
 
     //  验证码redis缓存前缀
     private readonly keyPrefix: string = "mathId"
@@ -23,7 +16,7 @@ export class AuthService {
      * @param findUserDto
      */
     async authLogin(findUserDto: FindUserDto) {
-        const verifyResult = await this.toolsService.verifySvgCode(this.keyPrefix, findUserDto.mathId, findUserDto.mathText)
+        const verifyResult = await this.toolsService.verifySvgCode(this.keyPrefix, findUserDto.captchaId, findUserDto.captchaCode)
         if (!verifyResult) {
             throw new HttpException("验证码错误，请重试", HttpStatus.INTERNAL_SERVER_ERROR)
         }

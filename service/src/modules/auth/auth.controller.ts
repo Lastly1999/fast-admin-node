@@ -6,17 +6,17 @@ import { FindUserDto } from "./dtos/find-user.dto"
 @Controller("auth")
 @ApiTags("系统权限")
 export class AuthController {
-    constructor(private readonly authService: AuthService) { }
+    constructor(private readonly authService: AuthService) {}
 
     @Post("/login")
-    @ApiOperation({ summary: '鉴权登录' })
+    @ApiOperation({ summary: "鉴权登录" })
     @ApiBody({ type: FindUserDto })
     async authLogin(@Body() findUserDto: FindUserDto) {
         return await this.authService.authLogin(findUserDto)
     }
 
     @Get("/code")
-    @ApiOperation({ summary: '获取图片验证码' })
+    @ApiOperation({ summary: "获取图片验证码" })
     async authImgCode() {
         return this.authService.generateUserSvgCode()
     }

@@ -1,24 +1,30 @@
 import { Module } from "@nestjs/common"
-import { AuthController } from "./auth.controller"
 import { AuthService } from "./auth.service"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { User } from "../user/user.entity"
 import { ToolsService } from "../tools/tools.service"
 import { UserModule } from "../user/user.module"
+import { UserService } from "../user/user.service"
+import { JwtModule, JwtService } from "@nestjs/jwt"
 import { PassportModule } from "@nestjs/passport"
-import { jwtConstants } from "./constants"
-import { JwtModule } from "@nestjs/jwt"
+import { JwtStrategy } from "./jwt.strategy"
+import { AuthController } from "./auth.controller"
+import { ConfigModule, ConfigService } from "@nestjs/config"
 
 @Module({
     controllers: [AuthController],
-    providers: [AuthService, ToolsService],
+    providers: [AuthService, ToolsService, UserService, JwtStrategy],
+    exports: [JwtModule],
     imports: [
-        TypeOrmModule.forFeature([User]),
         UserModule,
-        PassportModule,
-        JwtModule.register({
-            secret: jwtConstants.secret,
-            signOptions: { expiresIn: "60s" },
+        TypeOrmModule.forFeature([User]),
+        PassportModule.register({ defaultStrategy: "local" }),
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService) => ({
+                secretOrPrivateKey: configService.get<string>("JWT_SECRET"),
+            }),
+            inject: [ConfigService],
         }),
     ],
 })

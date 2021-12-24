@@ -1,4 +1,4 @@
-import {defineConfig, loadEnv} from "vite"
+import { defineConfig, loadEnv } from "vite"
 import vue from "@vitejs/plugin-vue"
 
 // jsx plugin
@@ -9,8 +9,8 @@ import path from "path"
 import themePreprocessorPlugin from "@zougt/vite-plugin-theme-preprocessor";
 
 // https://vitejs.dev/config/
-export default ({mode}: any) => {
-    process.env = {...process.env, ...loadEnv(mode, process.cwd())}
+export default ({ mode }: any) => {
+    process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
 
     return defineConfig({
         server: {
