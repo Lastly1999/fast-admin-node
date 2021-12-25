@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import {onMounted, reactive, ref, inject} from "vue"
+import { onMounted, reactive, ref, inject } from "vue"
 import QueryGroup from "@/components/QueryGroup/QueryGroup.vue"
 import FContainer from "@/components/FContainer/FContainer.vue"
 import FTable from "@/components/FTable/FTable.vue"
 
-import type {QueryJsonItem} from "@/components/QueryGroup/QueryGroup.vue"
-import type {Moment} from 'moment'
+import type { QueryJsonItem } from "@/components/QueryGroup/QueryGroup.vue"
+import type { Moment } from 'moment'
 
 
 // apis
-import {getSystemLogs} from "@/services/system/sys"
-import type {ApiLogsParams} from "@/services/model/response/role";
+import { getSystemLogs } from "@/services/system/sys"
+import type { ApiLogsParams } from "@/services/model/response/role";
 
 export type apiLogsItem = {
     id: number;
@@ -28,7 +28,7 @@ onMounted(() => {
 
 const getLogs = async () => {
     apiLogsTableLoading.value = true
-    const {data, code} = await getSystemLogs(apiLogsTableParams.value)
+    const { data, code } = await getSystemLogs(apiLogsTableParams.value)
     if (code === 200) {
         apiLogsData.value = data.list
         apiLogsToal.value = data.total
@@ -55,7 +55,7 @@ const apiLogsTableColumns = [
         dataIndex: "logMethod",
         key: "logMethod",
         width: "14%",
-        slots: {customRender: "tags"},
+        slots: { customRender: "tags" },
     },
     {
         title: 'api路径',
@@ -145,13 +145,18 @@ const queryJsonData = reactive<QueryJsonItem[]>([
 <template>
     <FContainer>
         <template v-slot:header>
-            <QueryGroup v-model:jsonData="queryJsonData" :form="apiLogsTableParams"/>
+            <QueryGroup v-model:jsonData="queryJsonData" :form="apiLogsTableParams" />
         </template>
         <template v-slot:main>
-            <FTable bordered size="middle" :loading="apiLogsTableLoading" :columns="apiLogsTableColumns"
-                    :data-source="apiLogsData"
-                    pagination
-                    rowKey="id">
+            <FTable
+                bordered
+                size="middle"
+                :loading="apiLogsTableLoading"
+                :columns="apiLogsTableColumns"
+                :data-source="apiLogsData"
+                pagination
+                rowKey="id"
+            >
                 <template #tags="{ data }">
                     <a-tag v-if="data === 'GET'" color="green">GET</a-tag>
                     <a-tag v-if="data === 'POST'" color="warning">POST</a-tag>
