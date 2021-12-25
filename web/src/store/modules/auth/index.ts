@@ -70,7 +70,7 @@ const authModule: AuthModule = {
         async API_POST_SYS_AUTH({ commit }: Store<any>, payload: LoginForm) {
             const { code, data } = await checkAuthUser<LoginForm>(payload)
             if (code === 200) {
-                localStorage.setItem("auth-token", data.token)
+                localStorage.setItem("auth-token", data.accessToken)
                 await router.push('/dashboard')
             } else {
                 throw new Error(data)

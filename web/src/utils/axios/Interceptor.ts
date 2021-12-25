@@ -57,17 +57,17 @@ function errorsHandler(data: any) {
     let errorMsg = "服务器异常"
     switch (data.code) {
         case 20001:
-            errorMsg = data.data
+            errorMsg = data.message
             router.push('/login').then(r => r)
         case 20002:
-            errorMsg = data.data
+            errorMsg = data.message
             router.push('/login').then(r => r)
         case 500:
-            errorMsg = data.data
+            errorMsg = data.message
         case 401:
-            errorMsg = data.msg
+            errorMsg = data.message
         default:
-            errorMsg = data.msg
+            errorMsg = data.message
     }
     alertMsg("error", errorMsg)
 }

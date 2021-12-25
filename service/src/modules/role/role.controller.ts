@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Param, Patch, Post, Put } from "@nestjs/common"
+import { Body, Controller, Delete, Param, Patch, Post, Put, UseGuards } from "@nestjs/common"
 import { RoleService } from "./role.service"
 import { PutRoleDto } from "./dtos/put-role.dto"
 import { GetRoleDto } from "./dtos/get-role.dto"
 import { UpdateRoleDto } from "./dtos/update-role.dto"
 import { ApiBody, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger"
+import { AuthGuard } from "@nestjs/passport"
 
+@UseGuards(AuthGuard("jwt"))
 @Controller("role")
 @ApiTags("系统角色")
 export class RoleController {

@@ -1,9 +1,13 @@
-import { Body, Controller, Get, Param, Patch, Post } from "@nestjs/common"
+import { Body, Controller, Get, Patch, Post, Req, UseGuards } from "@nestjs/common"
 import { CreateUserDto } from "./dtos/create-user.dto"
 import { UserService } from "./user.service"
 import { UpdateUserDto } from "./dtos/update-user.dto"
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
+import { AuthGuard } from "@nestjs/passport"
+import { Request } from "express"
+import { JwtTokenParams } from "../auth/jwt.strategy"
 
+@UseGuards(AuthGuard("jwt"))
 @Controller("user")
 @ApiTags("系统用户")
 export class UserController {
@@ -23,8 +27,15 @@ export class UserController {
         return await this.userService.updateUser(updateUserDto)
     }
 
-    @Get("role/:id")
-    async getUserRoles(@Param("id") id: string) {
-        return await this.userService.getUserRoles(id)
+    @Get("role")
+    @ApiOperation({ summary: "查询用户角色列表" })
+    async getUserRoles(@Req() request: Request) {
+        return await this.userService.getUserRoles((request.user as JwtTokenParams).roleId)
+    }
+
+    @Get("menu")
+    @ApiOperation({ summary: "获取用户系统菜单" })
+    async getSysRoleMenus(@Req() request: Request) {
+        return await this.userService.getUserRoleMenus((request.user as JwtTokenParams).roleId)
     }
 }

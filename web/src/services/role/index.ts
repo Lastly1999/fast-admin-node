@@ -9,7 +9,7 @@ import { RoleForm, RolePermissionParam } from "../model/response/role"
 export const getRoles = (): Promise<HttpResponse> => {
     return httpRequest({
         method: 'get',
-        path: '/role/role'
+        path: '/user/role'
     })
 }
 

@@ -10,8 +10,8 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
         const message = exception.message
         Logger.error(message, "-------响应拦截错误-------")
         const errorResponse = {
-            data: message, // 获取全部的错误信息
-            message: "request:error",
+            data: null, // 管道捕获到错误，此时响应的参数应该全部不包含data参数
+            message: message, // 获取全部的错误信息
             code: exception.getStatus(), // 自定义code
             url: request.originalUrl, // 错误的url地址
         }

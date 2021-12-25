@@ -1,0 +1,8 @@
+{
+	"dependencies": {
+		"@nestjs/passport": "^8.0.1"
+	},
+	"devDependencies": {
+		"@types/passport-jwt": "^3.0.6"
+	}
+}

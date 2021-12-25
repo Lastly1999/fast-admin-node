@@ -1,9 +1,11 @@
-import { Body, Controller, Post } from "@nestjs/common"
+import { Body, Controller, Post, UseGuards } from "@nestjs/common"
 import { SystemService } from "./system.service"
 import { PutIconDto } from "./dtos/put-icon.dto"
 import { GetRoleDto } from "../role/dtos/get-role.dto"
 import { ApiOperation, ApiTags } from "@nestjs/swagger"
+import { AuthGuard } from "@nestjs/passport"
 
+@UseGuards(AuthGuard("jwt"))
 @Controller("sys")
 @ApiTags("系统工具")
 export class SystemController {

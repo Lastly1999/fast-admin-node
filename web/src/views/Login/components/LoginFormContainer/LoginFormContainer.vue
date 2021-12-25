@@ -1,33 +1,16 @@
 <script lang="ts" setup>
-import type { PropType } from "vue"
 import { ref } from 'vue'
 import type { LoginForm } from "@/services/model/response/role"
 import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface'
+
+// props typings
+import LoginFormProps from "./props"
 
 //components
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 
 
-export type AutCodeOptions = {
-    cap: string;
-    captchaId: string;
-}
-
-const props = defineProps({
-    formLoading: {
-        type: Boolean,
-        default: () => false
-    },
-    authCode: {
-        type: Object as PropType<AutCodeOptions>,
-        default: () => {
-            return {
-                cap: "",
-                captchaId: ""
-            }
-        }
-    }
-})
+defineProps(LoginFormProps)
 
 const formRef = ref()
 

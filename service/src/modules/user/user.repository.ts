@@ -35,4 +35,13 @@ export class UserRepository extends Repository<User> {
         const allUseBuilder = createdBuilder.innerJoinAndSelect("sys_users.roles", "roles")
         return await allUseBuilder.where("sys_users.id = :id", { id: id }).getOne()
     }
+
+    /**
+     * 查询用户的权限菜单信息
+     * @param id
+     */
+    async findUserRoleMenus(id: number) {
+        // .leftJoinAndSelect(Photo, "photo", "photo.userId = user.id")
+        return await this.manager.getRepository(User).createQueryBuilder("sys_users").innerJoinAndSelect("sys_users.roles", "roles").select(["roles"]).getOne()
+    }
 }

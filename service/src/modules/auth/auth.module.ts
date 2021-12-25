@@ -5,11 +5,11 @@ import { User } from "../user/user.entity"
 import { ToolsService } from "../tools/tools.service"
 import { UserModule } from "../user/user.module"
 import { UserService } from "../user/user.service"
-import { JwtModule, JwtService } from "@nestjs/jwt"
+import { JwtModule } from "@nestjs/jwt"
 import { PassportModule } from "@nestjs/passport"
 import { JwtStrategy } from "./jwt.strategy"
 import { AuthController } from "./auth.controller"
-import { ConfigModule, ConfigService } from "@nestjs/config"
+import { jwtConstants } from "./constants"
 
 @Module({
     controllers: [AuthController],
@@ -18,13 +18,9 @@ import { ConfigModule, ConfigService } from "@nestjs/config"
     imports: [
         UserModule,
         TypeOrmModule.forFeature([User]),
-        PassportModule.register({ defaultStrategy: "local" }),
-        JwtModule.registerAsync({
-            imports: [ConfigModule],
-            useFactory: async (configService: ConfigService) => ({
-                secretOrPrivateKey: configService.get<string>("JWT_SECRET"),
-            }),
-            inject: [ConfigService],
+        PassportModule,
+        JwtModule.register({
+            secret: jwtConstants.secret,
         }),
     ],
 })

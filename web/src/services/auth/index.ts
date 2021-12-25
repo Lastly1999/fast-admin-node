@@ -1,8 +1,8 @@
 import httpRequest from "@/utils/axios/service"
-import {HttpResponse} from "../model/request/public"
-import {MenuInfo} from "@/services/model/response/role"
-import {UpdateSystemUserRoleParams} from "@/services/model/response/auth"
-import {UpdateBaseMenuParams} from "@/services/model/request/auth";
+import { HttpResponse } from "../model/request/public"
+import { MenuInfo } from "@/services/model/response/role"
+import { UpdateSystemUserRoleParams } from "@/services/model/response/auth"
+import { UpdateBaseMenuParams } from "@/services/model/request/auth";
 
 /**
  * 鉴权登录
@@ -30,10 +30,10 @@ export const getImgsAuthCode = (): Promise<HttpResponse> => {
  * 不需要请求参数 后端会在token内获取用户的权限id
  * @param id
  */
-export const getSysMenus = (id: number | string | undefined): Promise<HttpResponse> => {
+export const getSysMenus = (): Promise<HttpResponse> => {
     return httpRequest({
         method: 'get',
-        path: `/auth/menu`
+        path: `/user/menu`
     })
 }
 
