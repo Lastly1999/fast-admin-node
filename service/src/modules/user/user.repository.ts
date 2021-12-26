@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from "typeorm"
+import { EntityRepository, Repository, getConnection } from "typeorm"
 import { User } from "./user.entity"
 import { CreateUserDto } from "./dtos/create-user.dto"
 import { Role } from "../role/role.entity"
@@ -37,11 +37,10 @@ export class UserRepository extends Repository<User> {
     }
 
     /**
-     * 查询用户的权限菜单信息
+     * 查询用户详情
      * @param id
      */
-    async findUserRoleMenus(id: number) {
-        // .leftJoinAndSelect(Photo, "photo", "photo.userId = user.id")
-        return await this.manager.getRepository(User).createQueryBuilder("sys_users").innerJoinAndSelect("sys_users.roles", "roles").select(["roles"]).getOne()
+    async findUserInfoById(id: string) {
+        return this.manager.getRepository(User).findOne(id, { relations: ["roles"] })
     }
 }

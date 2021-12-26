@@ -31,4 +31,4 @@ import { SystemModule } from "./modules/system/system.module"
         SystemModule,
     ],
 })
-export class AppModule { }
+export class AppModule {}

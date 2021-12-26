@@ -21,7 +21,7 @@ export class AuthService {
             throw new HttpException("验证码错误，请重试", HttpStatus.INTERNAL_SERVER_ERROR)
         }
         const userInfo = await this.userService.findUser(findUserDto.userName, findUserDto.passWord)
-        const payload = { username: userInfo.userName, sub: userInfo.id, roleId: userInfo.roleId }
+        const payload = { username: userInfo.userName, id: userInfo.id, roleId: userInfo.roleId }
         return {
             accessToken: this.jwtService.sign(payload),
         }

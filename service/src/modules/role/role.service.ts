@@ -65,4 +65,17 @@ export class RoleService {
         }
         return "删除成功"
     }
+
+    /**
+     * 获取用户角色的ids列表
+     * @param id
+     */
+    async getRoleIdsByUserId(id: string) {
+        try {
+            const rolesRes = await this.roleRepository.findRoleByUserId(id)
+            return rolesRes.map((item) => item.roleId)
+        } catch (e) {
+            throw new HttpException("系统错误", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 }
