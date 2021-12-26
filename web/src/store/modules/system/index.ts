@@ -83,7 +83,7 @@ export const systemModule: SystemModule = {
          */
         async API_GET_SYS_ICONS({ commit }: Store<any>) {
             const { data, code } = await getSystemIcons()
-            if (code === 200) commit('SET_SYS_ICONS', data.icons)
+            if (code === 200) commit('SET_SYS_ICONS', data)
         },
         /**
          * 请求系统全部菜单列表
@@ -99,7 +99,7 @@ export const systemModule: SystemModule = {
          */
         async API_GET_SYS_ROLES({ commit }: Store<any>) {
             const { data, code } = await getRoles()
-            if (code === 200) commit('SET_SYS_ROLES', data.roles)
+            if (code === 200) commit('SET_SYS_ROLES', data)
         }
     },
     mutations: {

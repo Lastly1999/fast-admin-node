@@ -39,6 +39,6 @@ export type MenuInfo = {
 
 export type ApiLogsParams = {
     timer: string[];
-    page: number;
+    pageNo: number;
     pageSize: number;
 }

@@ -84,7 +84,7 @@ const apiLogsTableColumns = [
 ]
 const apiLogsTableParams = ref<ApiLogsParams>({
     timer: [],
-    page: 1,
+    pageNo: 1,
     pageSize: 10
 })
 const apiLogsToal = ref(0)
@@ -166,7 +166,7 @@ const queryJsonData = reactive<QueryJsonItem[]>([
             </FTable>
             <a-pagination
                 class="system-pagination"
-                v-model:current="apiLogsTableParams.page"
+                v-model:current="apiLogsTableParams.pageNo"
                 v-model:pageSize="apiLogsTableParams.pageSize"
                 show-size-changer
                 :total="apiLogsToal"

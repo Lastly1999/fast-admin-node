@@ -24,7 +24,7 @@ const emit = defineEmits<{
 
 const replaceFields = {
 	children: 'children',
-	title: 'label',
+	title: 'name',
 	key: 'id'
 };
 
