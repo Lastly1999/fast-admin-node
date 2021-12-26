@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from "@nestjs/common"
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, UseGuards } from "@nestjs/common"
 import { CreateUserDto } from "./dtos/create-user.dto"
 import { UserService } from "./user.service"
 import { UpdateUserDto } from "./dtos/update-user.dto"
@@ -6,6 +6,7 @@ import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { AuthGuard } from "@nestjs/passport"
 import { Request } from "express"
 import { JwtTokenParams } from "../auth/jwt.strategy"
+import { FindUserDto } from "./dtos/find-user.dto"
 
 @UseGuards(AuthGuard("jwt"))
 @Controller("user")
@@ -20,10 +21,11 @@ export class UserController {
     }
 
     @Post("user")
-    @ApiOperation({ summary: "创建系统用户" })
-    @ApiBody({ type: CreateUserDto })
-    async createUser(@Body() createUserDto: CreateUserDto) {
-        return await this.userService.createUser(createUserDto)
+    @ApiOperation({ summary: "查询系统用户列表" })
+    @ApiBody({ type: FindUserDto })
+    @HttpCode(HttpStatus.OK)
+    async createUser(@Body() findUserDto: FindUserDto) {
+        return await this.userService.findUserAll(findUserDto)
     }
 
     @Patch("user")

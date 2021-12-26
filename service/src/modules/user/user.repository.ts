@@ -1,4 +1,4 @@
-import { EntityRepository, Repository, getConnection } from "typeorm"
+import { EntityRepository, Repository, getConnection, Like } from "typeorm"
 import { User } from "./user.entity"
 import { CreateUserDto } from "./dtos/create-user.dto"
 import { Role } from "../role/role.entity"
@@ -42,5 +42,12 @@ export class UserRepository extends Repository<User> {
      */
     async findUserInfoById(id: string) {
         return this.manager.getRepository(User).findOne(id, { relations: ["roles"] })
+    }
+
+    /**
+     * 查询系统用户列表
+     */
+    async findAllUsers(pageSize = 10, pageNo = 1, keywords: string) {
+        return await this.manager.getRepository(User).find({ relations: ["roles"] })
     }
 }

@@ -5,18 +5,30 @@ import { Role } from "./role.entity"
 import { PutRoleDto } from "./dtos/put-role.dto"
 import { GetRoleDto } from "./dtos/get-role.dto"
 import { UpdateRoleDto } from "./dtos/update-role.dto"
+import { UpdateRoleMenusDto } from "./dtos/update-role-menus.dto"
 
 @Injectable()
 export class RoleService {
     constructor(@InjectRepository(RoleRepository) private readonly roleRepository: RoleRepository) {}
 
     /**
-     * 查询全部系统角色
+     * 查询全部系统角色(带分页)
      * @param getRoleDto
      */
     async findAllSysRoles(getRoleDto: GetRoleDto) {
         try {
             return await this.roleRepository.findAllSysRole(getRoleDto.pageSize, getRoleDto.pageNo, getRoleDto.keywords)
+        } catch (e) {
+            throw new HttpException("系统错误", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    /**
+     * 查询全部系统角色
+     */
+    async findAllRoles() {
+        try {
+            return await this.roleRepository.find()
         } catch (e) {
             throw new HttpException("系统错误", HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -77,5 +89,25 @@ export class RoleService {
         } catch (e) {
             throw new HttpException("系统错误", HttpStatus.INTERNAL_SERVER_ERROR)
         }
+    }
+
+    /**
+     * 查询系统用户角色信息列表
+     * @param id
+     */
+    async getRolesInfoByUserId(id: string) {
+        try {
+            return await this.roleRepository.findRoleByUserId(id)
+        } catch (e) {
+            throw new HttpException("系统错误", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    /**
+     * 更新角色的权限菜单关联
+     * @param updateRoleMenusDto
+     */
+    async updateRoleMenus(updateRoleMenusDto: UpdateRoleMenusDto) {
+        const role = new Role()
     }
 }

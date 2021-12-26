@@ -33,7 +33,7 @@ export const getImgsAuthCode = (): Promise<HttpResponse> => {
 export const getSysMenus = (): Promise<HttpResponse> => {
     return httpRequest({
         method: 'get',
-        path: `/menu/menu`
+        path: `/menu/role`
     })
 }
 
@@ -54,7 +54,7 @@ export const getAllSysMenus = (): Promise<HttpResponse> => {
 export const getUserMenuIds = (id: number | null): Promise<HttpResponse> => {
     return httpRequest({
         method: 'get',
-        path: `/auth/menuids/${id}`
+        path: `/menu/ids/${id}`
     })
 }
 

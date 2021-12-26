@@ -4,6 +4,8 @@ import { User } from "./user.entity"
 import { CreateUserDto } from "./dtos/create-user.dto"
 import { UserRepository } from "./user.repository"
 import { UpdateUserDto } from "./dtos/update-user.dto"
+import { FindUserDto } from "./dtos/find-user.dto"
+import { find } from "rxjs"
 
 @Injectable()
 export class UserService {
@@ -25,6 +27,14 @@ export class UserService {
         } catch (e) {
             throw new HttpException("发生未知错误", HttpStatus.INTERNAL_SERVER_ERROR)
         }
+    }
+
+    /**
+     * 查询系统用户列表
+     * @param findUserDto
+     */
+    async findUserAll(findUserDto: FindUserDto) {
+        return await this.userRepository.findAllUsers(findUserDto.pageSize, findUserDto.pageNo, findUserDto.keywords)
     }
 
     /**
