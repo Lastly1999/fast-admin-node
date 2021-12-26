@@ -92,10 +92,10 @@ const authModule: AuthModule = {
          * @param id
          */
         async API_GET_SYS_MENUS({ commit }: Store<any>, id: string | number) {
-            const { code, data } = await getSysMenus(id)
+            const { code, data } = await getSysMenus()
             if (code === 200) {
-                commit('SET_ROLE_WHITE_LIST', generateRouteWhiteList(data.menus))
-                commit('SET_SYS_MENUS', listToTree(data.menus))
+                commit('SET_ROLE_WHITE_LIST', generateRouteWhiteList(data))
+                commit('SET_SYS_MENUS', listToTree(data))
             }
         },
         /**
@@ -104,7 +104,7 @@ const authModule: AuthModule = {
          */
         async API_GET_SYS_USER_INFO({ commit }: Store<any>) {
             const { code, data } = await getSystemUserInfo()
-            if (code === 200) localStorage.setItem('user-info', JSON.stringify(data.userInfo))
+            if (code === 200) localStorage.setItem('user-info', JSON.stringify(data))
         }
     },
     mutations: {

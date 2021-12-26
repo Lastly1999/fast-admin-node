@@ -6,7 +6,7 @@ import vueJsx from "@vitejs/plugin-vue-jsx"
 // @ts-ignore
 import path from "path"
 // @ts-ignore
-import themePreprocessorPlugin from "@zougt/vite-plugin-theme-preprocessor";
+import themePreprocessorPlugin from "@zougt/vite-plugin-theme-preprocessor"
 
 // https://vitejs.dev/config/
 export default ({ mode }: any) => {

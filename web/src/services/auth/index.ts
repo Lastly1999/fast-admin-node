@@ -2,7 +2,7 @@ import httpRequest from "@/utils/axios/service"
 import { HttpResponse } from "../model/request/public"
 import { MenuInfo } from "@/services/model/response/role"
 import { UpdateSystemUserRoleParams } from "@/services/model/response/auth"
-import { UpdateBaseMenuParams } from "@/services/model/request/auth";
+import { UpdateBaseMenuParams } from "@/services/model/request/auth"
 
 /**
  * 鉴权登录
@@ -33,7 +33,7 @@ export const getImgsAuthCode = (): Promise<HttpResponse> => {
 export const getSysMenus = (): Promise<HttpResponse> => {
     return httpRequest({
         method: 'get',
-        path: `/user/menu`
+        path: `/menu/menu`
     })
 }
 
@@ -85,7 +85,7 @@ export const deleteSystemMenu = (menuId: number) => {
 export const getSystemUserInfo = () => {
     return httpRequest({
         method: "get",
-        path: `/auth/user`
+        path: `/user/user`
     })
 }
 

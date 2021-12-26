@@ -13,7 +13,7 @@ onMounted(() => {
   setTimeout(() => {
     panelLoading.value = false
   }, 500)
-  
+
 })
 
 </script>

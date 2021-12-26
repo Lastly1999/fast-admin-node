@@ -1,47 +1,49 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue"
-import { Store, useStore } from "vuex"
-import type { AutCodeOptions } from './components/LoginFormContainer/LoginFormContainer.vue'
-import LoginFormContainer from './components/LoginFormContainer/LoginFormContainer.vue'
-import type { LoginForm } from '@/services/model/response/role'
+import { onMounted, ref } from "vue";
+import { Store, useStore } from "vuex";
+import type { AutCodeOptions } from "./components/LoginFormContainer/LoginFormContainer.vue";
+import LoginFormContainer from "./components/LoginFormContainer/LoginFormContainer.vue";
+import type { LoginForm } from "@/services/model/response/role";
 
 // apis
-import { getImgsAuthCode } from "@/services/auth"
-
+import { getImgsAuthCode } from "@/services/auth";
 
 onMounted(() => {
-    getAuthImg()
-})
+    getAuthImg();
+});
 
-const store: Store<any> = useStore()
+const store: Store<any> = useStore();
 
 // 登录button loading
-const formLoading = ref<boolean>(false)
+const formLoading = ref<boolean>(false);
 
 // 登录方法
 const loginAction = async (form: LoginForm): Promise<any> => {
-    formLoading.value = true
+    console.log("test")
+    formLoading.value = true;
     try {
-        await store.dispatch("authModule/API_POST_SYS_AUTH", { ...form, captchaId: authCodeParams.value.captchaId })
+        await store.dispatch("authModule/API_POST_SYS_AUTH", {
+            ...form,
+            captchaId: authCodeParams.value.captchaId,
+        });
     } catch {
-        await getAuthImg()
+        await getAuthImg();
     } finally {
-        formLoading.value = false
+        formLoading.value = false;
     }
-}
+};
 
 // 图形验证码参数
 const authCodeParams = ref<AutCodeOptions>({
     cap: "",
-    captchaId: ""
-})
+    captchaId: "",
+});
 
 // 获取图形验证码
 const getAuthImg = async () => {
-    const { code, data } = await getImgsAuthCode()
-    if (code === 200) authCodeParams.value = { ...data }
-}
-
+    const { code, data } = await getImgsAuthCode();
+    if (code === 200) authCodeParams.value = { ...data };
+};
 </script>
 
 <template>
@@ -59,7 +61,7 @@ const getAuthImg = async () => {
         />
     </div>
 </template>
- 
+
 <style lang="scss" scoped>
 @import "./index.scss";
 </style>
