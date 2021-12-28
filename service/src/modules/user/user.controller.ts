@@ -1,5 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, UseGuards } from "@nestjs/common"
-import { CreateUserDto } from "./dtos/create-user.dto"
+import { Body, Controller, Get, HttpCode, HttpStatus, Patch, Post, Req, UseGuards } from "@nestjs/common"
 import { UserService } from "./user.service"
 import { UpdateUserDto } from "./dtos/update-user.dto"
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
@@ -12,7 +11,8 @@ import { FindUserDto } from "./dtos/find-user.dto"
 @Controller("user")
 @ApiTags("系统用户")
 export class UserController {
-    constructor(private readonly userService: UserService) {}
+    constructor(private readonly userService: UserService) {
+    }
 
     @Get("user")
     @ApiOperation({ summary: "获取用户详情" })
