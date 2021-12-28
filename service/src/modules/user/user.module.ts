@@ -10,4 +10,4 @@ import { UserRepository } from "./user.repository"
     exports: [TypeOrmModule.forFeature([UserRepository]), UserModule],
     providers: [UserService],
 })
-export class UserModule { }
+export class UserModule {}

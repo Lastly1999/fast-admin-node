@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common"
 import { AuthService } from "./auth.service"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { User } from "../user/user.entity"
-import { ToolsService } from "../tools/tools.service"
+import { ToolsService } from "../../common/tools/tools.service"
 import { UserModule } from "../user/user.module"
 import { UserService } from "../user/user.service"
 import { JwtModule } from "@nestjs/jwt"
@@ -24,4 +24,4 @@ import { jwtConstants } from "./constants"
         }),
     ],
 })
-export class AuthModule {}
+export class AuthModule { }
