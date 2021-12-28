@@ -15,7 +15,7 @@ export class ValidationPipe implements PipeTransform {
         const errors = await validate(object)
         // 是否存在校验不通过的情况 errors是一个数组
         if (errors.length > 0) {
-            const msg = Object.values(errors[0].constraints)[0] // 只需要取第一个错误信息并返回即可
+            const msg = Object.values(errors[0].constraints)[0] // 取第一个错误信息并返回
             throw new BadRequestException(`Validation failed: ${msg}`)
         }
         return value
