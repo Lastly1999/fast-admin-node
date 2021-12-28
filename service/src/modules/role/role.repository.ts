@@ -1,4 +1,4 @@
-import { EntityRepository, Like, Repository } from "typeorm"
+import { EntityRepository, getConnection, Like, Repository } from "typeorm"
 import { Role } from "./role.entity"
 
 @EntityRepository(Role)
@@ -36,7 +36,6 @@ export class RoleRepository extends Repository<Role> {
 
     /**
      * 更新角色
-     * @param id
      * @param role
      */
     async updateRole(role: Role) {
@@ -49,5 +48,26 @@ export class RoleRepository extends Repository<Role> {
      */
     async deleteRole(role: Role) {
         return this.manager.getRepository(Role).remove(role)
+    }
+    /**
+     * 查询用户的角色权限列表
+     * @param id
+     */
+    async findRoleByUserId(id: string) {
+        return await this.manager
+            .getRepository(Role)
+            .createQueryBuilder("role")
+            .innerJoinAndSelect("sys_user_roles", "sur", "role.role_id = sur.role_id")
+            .andWhere("sur.user_id = :userId", { userId: id })
+            .getMany()
+    }
+
+    /**
+     * 更新角色关联的权限菜单列表
+     * @param permissionId
+     * @param roleId
+     */
+    async updateRoleBindMenus(permissionId: number[], roleId: number) {
+        // return getConnection().createQueryBuilder("sys_basemenu_roles")
     }
 }

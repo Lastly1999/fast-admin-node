@@ -4,6 +4,8 @@ import { User } from "./user.entity"
 import { CreateUserDto } from "./dtos/create-user.dto"
 import { UserRepository } from "./user.repository"
 import { UpdateUserDto } from "./dtos/update-user.dto"
+import { FindUserDto } from "./dtos/find-user.dto"
+import { find } from "rxjs"
 
 @Injectable()
 export class UserService {
@@ -25,6 +27,14 @@ export class UserService {
         } catch (e) {
             throw new HttpException("发生未知错误", HttpStatus.INTERNAL_SERVER_ERROR)
         }
+    }
+
+    /**
+     * 查询系统用户列表
+     * @param findUserDto
+     */
+    async findUserAll(findUserDto: FindUserDto) {
+        return await this.userRepository.findAllUsers(findUserDto.pageSize, findUserDto.pageNo, findUserDto.keywords)
     }
 
     /**
@@ -51,6 +61,18 @@ export class UserService {
     }
 
     /**
+     * 获取用户详情
+     * @param id
+     */
+    async getUserInfoById(id: string) {
+        const userInfo = await this.userRepository.findUserInfoById(id)
+        if (!userInfo) {
+            throw new HttpException("暂无用户信息", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+        return userInfo
+    }
+
+    /**
      * 获取用户角色的ids列表
      * @param id
      */
@@ -58,18 +80,6 @@ export class UserService {
         try {
             const rolesRes = await this.userRepository.findUserRoles(Number(id))
             return rolesRes.roles.map((item) => item.roleId)
-        } catch (e) {
-            throw new HttpException("系统错误", HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-    }
-
-    /**
-     * 查询用户所有的权限菜单
-     * @param userId
-     */
-    async getUserRoleMenus(userId: string) {
-        try {
-            return await this.userRepository.findUserRoleMenus(Number(userId))
         } catch (e) {
             throw new HttpException("系统错误", HttpStatus.INTERNAL_SERVER_ERROR)
         }

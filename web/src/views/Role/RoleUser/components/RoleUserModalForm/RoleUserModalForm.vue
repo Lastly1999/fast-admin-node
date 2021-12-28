@@ -68,7 +68,7 @@ watch(() => props.form.id, () => {
 const getRoles = async (id: number) => {
   const { code, data } = await getSystemUserRoles(id)
   if (code === 200) {
-    roles.value = data.roles
+    roles.value = data
   }
 }
 const roles = ref<RoleItem[]>([])

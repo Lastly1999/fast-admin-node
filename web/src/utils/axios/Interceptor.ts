@@ -58,10 +58,10 @@ function errorsHandler(data: any) {
     switch (data.code) {
         case 20001:
             errorMsg = data.message
-            router.push('/login').then(r => r)
+            // router.push('/login').then(r => r)
         case 20002:
             errorMsg = data.message
-            router.push('/login').then(r => r)
+            // router.push('/login').then(r => r)
         case 500:
             errorMsg = data.message
         case 401:

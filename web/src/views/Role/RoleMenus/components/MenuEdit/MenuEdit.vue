@@ -1,23 +1,23 @@
 <script lang="ts" setup>
-import {ref, watch} from "vue"
+import { ref, watch } from "vue"
 
 // global components
 import FModal from "@/components/FModal/FModal.vue"
 import IconSelect from "@/components/IconSelect/IconSelect.vue"
 
 // apis
-import {updateBaseMenuInfo, getBaseMenuInfo} from "@/services/auth"
-import {ValidateErrorEntity} from "ant-design-vue/es/form/interface";
+import { updateBaseMenuInfo, getBaseMenuInfo } from "@/services/auth"
+import { ValidateErrorEntity } from "ant-design-vue/es/form/interface";
 
 // typings
-import type {MenuFormOptions} from "@/views/Main/Role/RoleMenus/components/MenuDrawerForm/MenuDrawerForm.vue";
-import type {UpdateBaseMenuParams} from "@/services/model/request/auth";
+import type { MenuFormOptions } from "@/views/Main/Role/RoleMenus/components/MenuDrawerForm/MenuDrawerForm.vue";
+import type { UpdateBaseMenuParams } from "@/services/model/request/auth";
 
 
 type EditMenuForm = {
     id: string;
     icon: string;
-    label: string;
+    name: string;
     path: string;
 }
 
@@ -40,7 +40,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
-    (event: 'success'): void
+    (event: 'success'): void,
+    (event: "update:visible", flag: boolean): void
 }>()
 
 watch(() => props.id, val => {
@@ -57,15 +58,15 @@ watch(() => props.id, val => {
 const form = ref<EditMenuForm>({
     id: '',
     icon: '',
-    label: '',
+    name: '',
     path: ''
 })
 
 const rules = {
-    id: [{required: true, message: '无根菜单id'}],
-    label: [{required: true, message: '请输入'}],
-    icon: [{required: true, message: '请选择'}],
-    path: [{required: true, message: '请输入'}],
+    id: [{ required: true, message: '无根菜单id' }],
+    name: [{ required: true, message: '请输入' }],
+    icon: [{ required: true, message: '请选择' }],
+    path: [{ required: true, message: '请输入' }],
 }
 
 const menuForm = ref()
@@ -73,13 +74,13 @@ const menuForm = ref()
 // 编辑提交
 const onSubmit = () => {
     menuForm.value
-    .validate()
-    .then(() => {
-        updateMenu()
-    })
-    .catch((error: ValidateErrorEntity<MenuFormOptions>) => {
-        console.log(error)
-    })
+        .validate()
+        .then(() => {
+            updateMenu()
+        })
+        .catch((error: ValidateErrorEntity<MenuFormOptions>) => {
+            console.log(error)
+        })
 }
 
 /**
@@ -87,12 +88,12 @@ const onSubmit = () => {
  */
 const updateMenu = async () => {
     const params: UpdateBaseMenuParams = {
-        menuName: form.value.label,
+        menuName: form.value.name,
         menuId: form.value.id,
         menuIcon: form.value.icon,
         menuPath: form.value.path
     }
-    const {data, code} = await updateBaseMenuInfo(params)
+    const { data, code } = await updateBaseMenuInfo(params)
     if (code === 200) {
         emit('success')
     }
@@ -100,9 +101,14 @@ const updateMenu = async () => {
 
 </script>
 <template>
-    <FModal class="menu-edit-container" :confirm-loading="loading" v-model:title="title" v-model:value="visible"
-            @close="$emit('update:visible',false)"
-            @ok="onSubmit">
+    <FModal
+        class="menu-edit-container"
+        :confirm-loading="loading"
+        v-model:title="title"
+        v-model:value="visible"
+        @close="$emit('update:visible', false)"
+        @ok="onSubmit"
+    >
         <a-form ref="menuForm" :model="form" :rules="rules" layout="vertical">
             <div class="dialog-title">
                 <h3>菜单编辑</h3>
@@ -110,24 +116,24 @@ const updateMenu = async () => {
             <a-row :gutter="16">
                 <a-col :span="12">
                     <a-form-item label="菜单序号" name="id">
-                        <a-input disabled v-model:value="form.id" placeholder="请输入"/>
+                        <a-input disabled v-model:value="form.id" placeholder="请输入" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="12">
                     <a-form-item label="菜单名称" name="label">
-                        <a-input v-model:value="form.label" placeholder="请输入"/>
+                        <a-input v-model:value="form.name" placeholder="请输入" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row :gutter="16">
                 <a-col :span="12">
                     <a-form-item label="菜单路径" name="path">
-                        <a-input v-model:value="form.path" placeholder="请输入"/>
+                        <a-input v-model:value="form.path" placeholder="请输入" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="12">
                     <a-form-item label="菜单图标" name="icon">
-                        <IconSelect v-model:value="form.icon" placeholder="请选择"/>
+                        <IconSelect v-model:value="form.icon" placeholder="请选择" />
                     </a-form-item>
                 </a-col>
             </a-row>

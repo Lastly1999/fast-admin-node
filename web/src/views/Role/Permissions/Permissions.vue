@@ -1,23 +1,23 @@
 <script lang="ts" setup>
-import {inject, onMounted, reactive, ref} from "vue"
+import { inject, onMounted, reactive, ref } from "vue"
 
 // typings
-import type {RoleForm, RolePermissionParam} from "@/services/model/response/role"
-import type {TreeChecked} from "@/components/RoleTree/RoleTree.vue"
-import type {QueryJsonItem} from "@/components/QueryGroup/QueryGroup.vue"
+import type { RoleForm, RolePermissionParam } from "@/services/model/response/role"
+import type { TreeChecked } from "@/components/RoleTree/RoleTree.vue"
+import type { QueryJsonItem } from "@/components/QueryGroup/QueryGroup.vue"
 
 // apis
-import {appendRole, delRole, editPermission, editRole, getRoles} from "@/services/role"
-import {getAllSysMenus, getUserMenuIds} from "@/services/auth"
-import {toTree} from "@/utils/loadsh/data"
+import { appendRole, delRole, editPermission, editRole, getRoles } from "@/services/role"
+import { getAllSysMenus, getUserMenuIds } from "@/services/auth"
+import { toTree } from "@/utils/loadsh/data"
 
 // components
-import {alertMsg} from "@/utils/antd/antd"
+import { alertMsg } from "@/utils/antd/antd"
 import FTable from "@/components/FTable/FTable.vue"
 import RoleInfoDrawerForm from "./components/RoleInfoDrawerForm/RoleInfoDrawerForm.vue"
 import RoleTreeModal from "./components/RoleTreeModal/RoleTreeModal.vue"
 import FContainer from "@/components/FContainer/FContainer.vue"
-import {MOM_ENT} from "@/symbol/global"
+import { MOM_ENT } from "@/symbol/global"
 
 
 onMounted(() => {
@@ -72,8 +72,8 @@ const roleTableLoading = ref<boolean>(false);
 // 获取角色列表
 const getRoleTableList = async () => {
     roleTableLoading.value = true
-    const {data} = await getRoles()
-    roleData.value = data.roles
+    const { data } = await getRoles()
+    roleData.value = data
     roleTableLoading.value = false
     visibleRoleInfoDrawer.value = false
 };
@@ -88,14 +88,14 @@ const columns = [
             return data.index + 1;
         },
     },
-    {title: "角色名称", dataIndex: "roleName", key: "0", width: 150},
-    {title: "角色别名", dataIndex: "describe", key: "1", width: 150},
-    {title: "创建时间", dataIndex: "createdAt", key: "2", width: 230},
+    { title: "角色名称", dataIndex: "roleName", key: "0", width: 150 },
+    { title: "角色别名", dataIndex: "describe", key: "1", width: 150 },
+    { title: "创建时间", dataIndex: "createdAt", key: "2", width: 230 },
     {
         title: "操作",
         key: "4",
         fixed: "right",
-        slots: {customRender: "action"},
+        slots: { customRender: "action" },
     },
 ];
 
@@ -169,7 +169,7 @@ const visibleRoleTree = ref<boolean>(false)
 const getRoleTreeData = async (): Promise<void> => {
     const body = await getAllSysMenus()
     if (body.code === 200) {
-        roleTreeData.value = body.data.menus ? toTree(body.data.menus, "pId", "id") : []
+        roleTreeData.value = body.data ? toTree(body.data, "parentId", "id") : []
     }
 }
 
@@ -183,9 +183,9 @@ const parentKyes = ref<number[]>([])
 // getAllSysMenus
 const getRoleIds = async (id: number | null): Promise<void> => {
     const body = await getUserMenuIds(id)
-    if (body.code === 200 && body.data.roleIds) {
-        expandedKeys.value = body.data.roleIds
-        checkedKeys.value = body.data.roleIds
+    if (body.code === 200 && body.data) {
+        expandedKeys.value = body.data
+        checkedKeys.value = body.data
         return
     }
     expandedKeys.value = []
@@ -220,36 +220,51 @@ const roleTreeSubmit = async () => {
 <template>
     <FContainer>
         <template v-slot:header>
-            <QueryGroup v-model:jsonData="queryJsonData" v-model:form="queryForm"/>
+            <QueryGroup v-model:jsonData="queryJsonData" v-model:form="queryForm" />
         </template>
         <template v-slot:main>
             <!-- 角色列表 -->
-            <FTable bordered size="middle" :loading="roleTableLoading" :columns="columns" :data-source="roleData">
+            <FTable
+                bordered
+                size="middle"
+                :loading="roleTableLoading"
+                :columns="columns"
+                :data-source="roleData"
+            >
                 <template #action="{ data }">
                     <a @click="editRoleDrawer(data)">修改</a>
-                    <a-divider type="vertical"/>
+                    <a-divider type="vertical" />
                     <a @click="previewRoleTree(data)">查看权限树</a>
-                    <a-divider type="vertical"/>
-                    <a-popconfirm title="你确定要删除该角色吗?" ok-text="是的" cancel-text="算了吧" @confirm="removeRoleRow(data)">
+                    <a-divider type="vertical" />
+                    <a-popconfirm
+                        title="你确定要删除该角色吗?"
+                        ok-text="是的"
+                        cancel-text="算了吧"
+                        @confirm="removeRoleRow(data)"
+                    >
                         <a>删除</a>
                     </a-popconfirm>
                 </template>
                 <template #tags="{ data }">
                     <a-tag v-if="data.state === 1" color="success">
                         <template #icon>
-                            <check-circle-outlined/>
+                            <check-circle-outlined />
                         </template>
                         启用
                     </a-tag>
                     <a-tag v-else color="error">
                         <template #icon>
-                            <close-circle-outlined/>
+                            <close-circle-outlined />
                         </template>
                         禁用
                     </a-tag>
                 </template>
             </FTable>
-            <RoleInfoDrawerForm v-model:value="visibleRoleInfoDrawer" :form="roleInfoForm" @submit="onSubmit"/>
+            <RoleInfoDrawerForm
+                v-model:value="visibleRoleInfoDrawer"
+                :form="roleInfoForm"
+                @submit="onSubmit"
+            />
             <RoleTreeModal
                 v-model:value="visibleRoleTree"
                 v-model:checkedKeys="checkedKeys"

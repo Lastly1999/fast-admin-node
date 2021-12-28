@@ -30,14 +30,14 @@ export const toTree = <T>(data: T[], pidKey: string, idKey: string) => {
  */
 export const listToTree = (list: any[]) => {
     //遍历整个列表
-    return list.filter((cur: { id: any; children: any; pId: number; }) => {
+    return list.filter((cur: { id: any; children: any; parentId: number; }) => {
         // 获取当前节点的子节点
-        let children = list.filter((item: { pId: any; }) => item.pId === cur.id);
+        let children = list.filter((item: { parentId: any; }) => item.parentId === cur.id);
         if (children.length > 0) {
             cur.children = children;
         }
         //只返回顶级节点
-        return cur.pId == 0;
+        return cur.parentId == 0;
     });
 }
 

@@ -1,7 +1,6 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common"
+import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common"
 import { SystemService } from "./system.service"
 import { PutIconDto } from "./dtos/put-icon.dto"
-import { GetRoleDto } from "../role/dtos/get-role.dto"
 import { ApiOperation, ApiTags } from "@nestjs/swagger"
 import { AuthGuard } from "@nestjs/passport"
 
@@ -16,9 +15,9 @@ export class SystemController {
         return null
     }
 
-    @Post("icon")
+    @Get("icons")
     @ApiOperation({ summary: "获取系统图标" })
-    async getIcons(@Body() getIconDto: GetRoleDto) {
-        return this.systemService.getIcons(getIconDto)
+    async getIcons() {
+        return this.systemService.getIcons()
     }
 }

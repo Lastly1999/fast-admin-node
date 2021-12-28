@@ -1,28 +1,28 @@
 <script lang="ts" setup>
-import {computed, onMounted, reactive, ref, watch} from "vue"
-import {useStore} from "vuex"
+import { computed, onMounted, reactive, ref, watch } from "vue"
+import { useStore } from "vuex"
 
-import type {QueryJsonItem} from "@/components/QueryGroup/QueryGroup.vue"
+import type { QueryJsonItem } from "@/components/QueryGroup/QueryGroup.vue"
 // components
 import QueryGroup from "@/components/QueryGroup/QueryGroup.vue"
 import FContainer from "@/components/FContainer/FContainer.vue"
 import FTable from "@/components/FTable/FTable.vue"
-import type {UserForm} from "./components/RoleUserModalForm/RoleUserModalForm.vue"
+import type { UserForm } from "./components/RoleUserModalForm/RoleUserModalForm.vue"
 import RoleUserModalForm from "./components/RoleUserModalForm/RoleUserModalForm.vue"
 
 // types
-import type {RegisterUserForm, UserSystem} from "@/services/model/response/user"
-import type {listParams} from "@/services/model/response/public"
-import type {RoleItem} from "@/store/modules/system"
+import type { RegisterUserForm, UserSystem } from "@/services/model/response/user"
+import type { listParams } from "@/services/model/response/public"
+import type { RoleItem } from "@/store/modules/system"
 
 
 // apis
-import {createSystemUser, deleteSystemUser, editSystemUser, getUsers} from "@/services/user/user"
+import { createSystemUser, deleteSystemUser, editSystemUser, getUsers } from "@/services/user/user"
 
 // utils
-import {alertMsg} from "@/utils/antd/antd"
-import {createMd5Pass} from "@/utils/md5/md5"
-import {Moment} from "moment";
+import { alertMsg } from "@/utils/antd/antd"
+import { createMd5Pass } from "@/utils/md5/md5"
+import { Moment } from "moment";
 
 onMounted(() => {
     getSystemUsers()
@@ -109,24 +109,24 @@ const columns = [
     {
         title: "所有角色",
         width: 300,
-        slots: {customRender: "tags"},
+        slots: { customRender: "tags" },
     },
     {
         title: '创建时间',
-        dataIndex: 'CreatedAt',
-        key: 'CreatedAt',
+        dataIndex: 'createAt',
+        key: 'createAt',
         width: 220,
     },
     {
         title: '最近更新',
-        dataIndex: 'UpdatedAt',
-        key: 'UpdatedAt',
+        dataIndex: 'updateAt',
+        key: 'updateAt',
         width: 220,
     },
     {
         title: "操作",
         fixed: "right",
-        slots: {customRender: "action"},
+        slots: { customRender: "action" },
     },
 ]
 // 用户列表加载状态
@@ -138,7 +138,7 @@ const userData = ref<UserSystem[]>()
 const queryForm = ref<listParams>({
     keyWords: "",
     pageSize: 10,
-    page: 1,
+    pageNo: 1,
     startTime: '',
     endTime: '',
     time: []
@@ -146,7 +146,7 @@ const queryForm = ref<listParams>({
 
 watch(() => queryForm, val => {
     getSystemUsers()
-}, {deep: true})
+}, { deep: true })
 
 // 用户修改/新增表单按钮加载状态
 const formLoading = ref<boolean>(false)
@@ -191,7 +191,7 @@ const addFormRequest = async (): Promise<void> => {
         roleId: userForm.value.roleId,
         roleIds: userForm.value.roleIds,
     }
-    const {code} = await createSystemUser(param)
+    const { code } = await createSystemUser(param)
     if (code === 200) {
         alertMsg("success", "新增成功!")
     }
@@ -206,7 +206,7 @@ const updateFormRequest = async (): Promise<void> => {
         roleId: userForm.value.roleId,
         roleIds: userForm.value.roleIds,
     }
-    const {code} = await editSystemUser(param)
+    const { code } = await editSystemUser(param)
     if (code === 200) {
         alertMsg("success", "修改成功!")
     }
@@ -215,10 +215,12 @@ const updateFormRequest = async (): Promise<void> => {
 // 请求系统用户列表
 const getSystemUsers = async (): Promise<void> => {
     userTableLoading.value = true
-    const {code, data} = await getUsers(queryForm.value)
+    const { code, data } = await getUsers(queryForm.value)
     if (code === 200) {
-        userData.value = data.users
-        eachRoleIds()
+        userData.value = data
+        if (Array.isArray(userData.value) && userData.value.length > 0) {
+            await eachRoleIds()
+        }
     }
     userTableLoading.value = false
 }
@@ -227,7 +229,7 @@ const getSystemUsers = async (): Promise<void> => {
 const eachRoleIds = (): void => {
     userData.value!.map((item: UserSystem) => {
         item.roleIds = []
-        item.role.map(roleItem => {
+        item.roles.map(roleItem => {
             item.roleIds.push(roleItem.roleId)
         })
     })
@@ -235,7 +237,7 @@ const eachRoleIds = (): void => {
 
 // 请求删除系统用户
 const delSystemUser = async (id: number): Promise<void> => {
-    const {code} = await deleteSystemUser(id)
+    const { code } = await deleteSystemUser(id)
     if (code === 200) {
         alertMsg("success", "删除成功")
     }
@@ -248,25 +250,40 @@ const roleOptions = computed<RoleItem[]>(() => store.getters["systemModule/getSy
 <template>
     <FContainer>
         <template v-slot:header>
-            <QueryGroup v-model:jsonData="queryJsonData" v-model:form="queryForm"/>
+            <QueryGroup v-model:jsonData="queryJsonData" v-model:form="queryForm" />
         </template>
         <template v-slot:main>
-            <FTable bordered size="middle" :loading="userTableLoading" :columns="columns" :data-source="userData"
-                    rowKey="id">
+            <FTable
+                bordered
+                size="middle"
+                :loading="userTableLoading"
+                :columns="columns"
+                :data-source="userData"
+                rowKey="id"
+            >
                 <template #tags="{ data }">
-                    <a-tag v-for="item in data.role" color="green">{{ item.roleName }}</a-tag>
+                    <a-tag v-for="item in data.roles" color="green">{{ item.roleName }}</a-tag>
                 </template>
                 <template #action="{ data }">
                     <a @click="editUserRow(data)">修改</a>
-                    <a-divider type="vertical"/>
-                    <a-popconfirm title="你确定要删除该菜单吗?删除后无法恢复!" ok-text="是的" cancel-text="算了吧"
-                                  @confirm="delSystemUser(data.id)">
+                    <a-divider type="vertical" />
+                    <a-popconfirm
+                        title="你确定要删除该菜单吗?删除后无法恢复!"
+                        ok-text="是的"
+                        cancel-text="算了吧"
+                        @confirm="delSystemUser(data.id)"
+                    >
                         <a>删除</a>
                     </a-popconfirm>
                 </template>
             </FTable>
-            <RoleUserModalForm v-model:loading="formLoading" v-model:visible="userModalVisible"
-                               v-model:title="userModalTitle" :form="userForm" @submit="submitForm"/>
+            <RoleUserModalForm
+                v-model:loading="formLoading"
+                v-model:visible="userModalVisible"
+                v-model:title="userModalTitle"
+                :form="userForm"
+                @submit="submitForm"
+            />
         </template>
     </FContainer>
 </template>

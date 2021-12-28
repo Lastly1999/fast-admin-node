@@ -106,7 +106,6 @@ const onSubmit = () => {
         </a-form>
     </div>
 </template>
-<!-- <img style="width:100%" :src="authCode.codeBase" /> -->
 <style lang="scss" scoped>
 @import "./index.scss";
 </style>

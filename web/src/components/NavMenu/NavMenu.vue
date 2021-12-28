@@ -14,7 +14,7 @@
                     <template #icon>
                         <Icon :icon="item.icon"></Icon>
                     </template>
-                    {{ item.label }}
+                    {{ item.name }}
                 </a-menu-item>
             </template>
             <template v-else>
@@ -31,7 +31,7 @@ import { useRouter, useRoute } from 'vue-router'
 
 export type MenuItem = {
     path: string;
-    label: string;
+    name: string;
     children: MenuItem[];
     icon: string;
 }
@@ -50,7 +50,7 @@ const SubMenu = {
     template: `
         <a-sub-menu :key="menuInfo.path">
         <template #title>
-            {{ menuInfo.label }}
+            {{ menuInfo.name }}
         </template>
         <template #icon>
             <Icon :icon="menuInfo.icon"></Icon>
@@ -62,7 +62,7 @@ const SubMenu = {
                         <Icon :icon="item.icon"></Icon>
                         <i :class="['fa',item.icon]"></i>
                     </template>
-                    {{ item.label }}
+                    {{ item.name }}
                 </a-menu-item>
             </template>
             <template v-else>

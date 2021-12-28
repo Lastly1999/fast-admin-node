@@ -37,7 +37,7 @@ const userInfo: any = computed(() => JSON.parse(localStorage.getItem("user-info"
 const currentInfo = ref<RoleItem>()
 
 onMounted(() => {
-    currentInfo.value = userInfo.value.role.find((item: any) => item.roleId === userInfo.value.roleId)
+    currentInfo.value = userInfo.value.roles.find((item: any) => item.roleId === userInfo.value.roleId)
 })
 
 const visible = ref<boolean>(false)

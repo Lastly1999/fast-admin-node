@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, Req, UseGuards } from "@nestjs/common"
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, UseGuards } from "@nestjs/common"
 import { CreateUserDto } from "./dtos/create-user.dto"
 import { UserService } from "./user.service"
 import { UpdateUserDto } from "./dtos/update-user.dto"
@@ -6,6 +6,7 @@ import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { AuthGuard } from "@nestjs/passport"
 import { Request } from "express"
 import { JwtTokenParams } from "../auth/jwt.strategy"
+import { FindUserDto } from "./dtos/find-user.dto"
 
 @UseGuards(AuthGuard("jwt"))
 @Controller("user")
@@ -13,11 +14,18 @@ import { JwtTokenParams } from "../auth/jwt.strategy"
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
+    @Get("user")
+    @ApiOperation({ summary: "获取用户详情" })
+    async getUserInfo(@Req() request: Request) {
+        return await this.userService.getUserInfoById((request.user as JwtTokenParams).id)
+    }
+
     @Post("user")
-    @ApiOperation({ summary: "创建系统用户" })
-    @ApiBody({ type: CreateUserDto })
-    async createUser(@Body() createUserDto: CreateUserDto) {
-        return await this.userService.createUser(createUserDto)
+    @ApiOperation({ summary: "查询系统用户列表" })
+    @ApiBody({ type: FindUserDto })
+    @HttpCode(HttpStatus.OK)
+    async createUser(@Body() findUserDto: FindUserDto) {
+        return await this.userService.findUserAll(findUserDto)
     }
 
     @Patch("user")
@@ -31,11 +39,5 @@ export class UserController {
     @ApiOperation({ summary: "查询用户角色列表" })
     async getUserRoles(@Req() request: Request) {
         return await this.userService.getUserRoles((request.user as JwtTokenParams).roleId)
-    }
-
-    @Get("menu")
-    @ApiOperation({ summary: "获取用户系统菜单" })
-    async getSysRoleMenus(@Req() request: Request) {
-        return await this.userService.getUserRoleMenus((request.user as JwtTokenParams).roleId)
     }
 }

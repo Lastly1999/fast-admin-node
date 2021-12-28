@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common"
-import { GetRoleDto } from "../role/dtos/get-role.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { SystemRepository } from "./system.repository"
 
@@ -9,9 +8,8 @@ export class SystemService {
 
     /***
      * 查询系统图标集
-     * @param getIconsDto
      */
-    async getIcons(getIconsDto: GetRoleDto) {
-        return this.systemRepository.getIcons(getIconsDto.pageSize, getIconsDto.pageNo, getIconsDto.keywords)
+    async getIcons() {
+        return this.systemRepository.getIcons()
     }
 }

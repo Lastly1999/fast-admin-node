@@ -76,9 +76,9 @@ router.beforeEach(async (to: RouteLocationNormalized, form: RouteLocationNormali
             await store.dispatch("authModule/API_GET_SYS_USER_INFO") // 系统用户信息
             // 白名单列表
             const whiteList: string[] = store.getters["authModule/getWhiteList"]
-            if (whiteList.findIndex(item => item === to.path) === -1) {
-                next('/notAuth')
-            }
+            // if (whiteList.findIndex(item => item === to.path) === -1) {
+            //     next('/notAuth')
+            // }
         }
         next()
     }

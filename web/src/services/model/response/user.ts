@@ -8,7 +8,7 @@ export type UserSystem = {
     activatedAt: string;
     name: string;
     email: string;
-    role: UserChilRole[];
+    roles: UserChilRole[];
     birthday: string;
     age: string;
 }
