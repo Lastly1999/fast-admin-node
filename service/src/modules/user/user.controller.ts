@@ -15,7 +15,7 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Get("user")
-    @ApiOperation({ summary: "获取用户详情." })
+    @ApiOperation({ summary: "获取用户详情" })
     async getUserInfo(@Req() request: Request) {
         return await this.userService.getUserInfoById((request.user as JwtTokenParams).id)
     }
