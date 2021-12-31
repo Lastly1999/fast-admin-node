@@ -28,6 +28,7 @@ import { defineComponent, PropType, watch, reactive, toRefs, onMounted, computed
 import { useStore } from "vuex"
 import { Icon } from '@/components/FIcon/FIcon'
 import { useRouter, useRoute } from 'vue-router'
+import useSysConfigStore from "@/stores/useSysConfigStore"
 
 export type MenuItem = {
     path: string;
@@ -100,6 +101,7 @@ export default defineComponent({
         const router = useRouter()
         const route = useRoute()
         const store = useStore()
+        const sysConfigStore = useSysConfigStore()
         const menuState = reactive({
             collapsed: false as boolean,
             selectedKeys: [] as string[],

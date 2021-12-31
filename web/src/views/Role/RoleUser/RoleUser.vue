@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, reactive, ref, watch } from "vue"
-import { useStore } from "vuex"
+// import { useStore } from "vuex"
 
 import type { QueryJsonItem } from "@/components/QueryGroup/QueryGroup.vue"
 // components
@@ -21,14 +21,16 @@ import { createSystemUser, deleteSystemUser, editSystemUser, getUsers } from "@/
 
 // utils
 import { alertMsg } from "@/utils/antd/antd"
-import { createMd5Pass } from "@/utils/md5/md5"
-import { Moment } from "moment";
+
+import useSysCommonStore from "@/stores/useSysCommonStore"
 
 onMounted(() => {
     getSystemUsers()
 })
 
-const store = useStore()
+const sysCommonStore = useSysCommonStore()
+
+// const store = useStore()
 
 // 修改用户信息
 const editUserRow = (data: UserForm): void => {
@@ -244,7 +246,7 @@ const delSystemUser = async (id: number): Promise<void> => {
     await getSystemUsers()
 }
 
-const roleOptions = computed<RoleItem[]>(() => store.getters["systemModule/getSysRoles"])
+const roleOptions = computed<RoleItem[]>(() => sysCommonStore.getSysRoles)
 
 </script>
 <template>

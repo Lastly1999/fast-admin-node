@@ -11,6 +11,8 @@ import store from '@/store'
 import animate from "animate.css"
 // moment
 import moment from "moment"
+// pinia
+import { createPinia } from 'pinia'
 
 import "font-awesome/css/font-awesome.min.css"
 import { processChromeConole } from "./runtime.console"
@@ -28,6 +30,7 @@ function installGlobalComponents(app: any) {
 }
 
 function bootstrap() {
+    const pinia = createPinia()
     const app = createApp(App)
     app.provide(MOM_ENT, moment)
     installGlobalComponents(app)
@@ -35,6 +38,7 @@ function bootstrap() {
     app.use(Antd)
     app.use(store)
     app.use(animate)
+    app.use(pinia)
     app.mount("#app")
     processChromeConole()
 }
