@@ -5,7 +5,6 @@ import { CreateUserDto } from "./dtos/create-user.dto"
 import { UserRepository } from "./user.repository"
 import { UpdateUserDto } from "./dtos/update-user.dto"
 import { FindUserDto } from "./dtos/find-user.dto"
-import { find } from "rxjs"
 
 @Injectable()
 export class UserService {

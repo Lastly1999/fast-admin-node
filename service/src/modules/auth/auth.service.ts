@@ -6,7 +6,7 @@ import { JwtService } from "@nestjs/jwt"
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly toolsService: ToolsService, private readonly userService: UserService, private readonly jwtService: JwtService) { }
+    constructor(private readonly toolsService: ToolsService, private readonly userService: UserService, private readonly jwtService: JwtService) {}
 
     //  验证码redis缓存前缀
     private readonly keyPrefix: string = "mathId"

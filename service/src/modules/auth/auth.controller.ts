@@ -6,7 +6,7 @@ import { FindUserDto } from "./dtos/find-user.dto"
 @Controller("auth")
 @ApiTags("系统权限")
 export class AuthController {
-    constructor(private readonly authService: AuthService) { }
+    constructor(private readonly authService: AuthService) {}
 
     @Post("/login")
     @ApiOperation({ summary: "鉴权登录" })
@@ -30,6 +30,7 @@ export class AuthController {
     async getSystemAuthMenuIds() {
         return "ids"
     }
+
     @Patch("/menu")
     async updateRoleMenus() {
         return "update"

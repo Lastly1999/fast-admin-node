@@ -23,11 +23,13 @@ export class BaseMenuController {
     }
 
     @Get("menu/:menuId")
+    @ApiOperation({summary:"获取系统菜单详情"})
     async getMenuInfo(@Param("menuId") menuId: string) {
         return await this.baseMenuService.findOneMenuInfo(menuId)
     }
 
     @Get("ids/:roleId")
+    @ApiOperation({summary:"获取系统菜单的id列表"})
     async getMenuRoleIds(@Param("roleId") roleId: string) {
         return await this.baseMenuService.getMenuIdsByRoleId(roleId)
     }

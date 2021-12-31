@@ -16,14 +16,9 @@ async function bootstrap() {
     // 异常管道拦截过滤
     app.useGlobalFilters(new HttpExceptionFilter())
 
-    const options = new DocumentBuilder()
-        .setTitle('FastAdminApi')
-        .setDescription('ApiDocs')
-        .setVersion('1.0')
-        .build();
-    const document = SwaggerModule.createDocument(app, options);
-    SwaggerModule.setup('api', app, document);
-
+    const options = new DocumentBuilder().setTitle("FastAdminApi").setDescription("ApiDocs").setVersion("1.0").build()
+    const document = SwaggerModule.createDocument(app, options)
+    SwaggerModule.setup("api", app, document)
 
     await app.listen(5600)
 }
