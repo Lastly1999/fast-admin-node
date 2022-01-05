@@ -5,7 +5,6 @@ import { Role } from "./role.entity"
 import { PutRoleDto } from "./dtos/put-role.dto"
 import { GetRoleDto } from "./dtos/get-role.dto"
 import { UpdateRoleDto } from "./dtos/update-role.dto"
-import { UpdateRoleMenusDto } from "./dtos/update-role-menus.dto"
 
 @Injectable()
 export class RoleService {
@@ -101,13 +100,5 @@ export class RoleService {
         } catch (e) {
             throw new HttpException("系统错误", HttpStatus.INTERNAL_SERVER_ERROR)
         }
-    }
-
-    /**
-     * 更新角色的权限菜单关联
-     * @param updateRoleMenusDto
-     */
-    async updateRoleMenus(updateRoleMenusDto: UpdateRoleMenusDto) {
-        const role = new Role()
     }
 }

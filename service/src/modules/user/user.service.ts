@@ -5,7 +5,6 @@ import { CreateUserDto } from "./dtos/create-user.dto"
 import { UserRepository } from "./user.repository"
 import { UpdateUserDto } from "./dtos/update-user.dto"
 import { FindUserDto } from "./dtos/find-user.dto"
-import { find } from "rxjs"
 
 @Injectable()
 export class UserService {
@@ -53,11 +52,15 @@ export class UserService {
      * @param updateUserDto
      */
     async updateUser(updateUserDto: UpdateUserDto) {
-        const user = new User()
-        user.id = updateUserDto.id
-        user.userName = updateUserDto.userName
-        user.nikeName = updateUserDto.nikeName
-        await this.userRepository.update(user, updateUserDto)
+        try {
+            const user = new User()
+            user.id = updateUserDto.id
+            user.userName = updateUserDto.userName
+            user.nikeName = updateUserDto.nikeName
+            await this.userRepository.update(user, updateUserDto)
+        } catch (e) {
+            throw new HttpException("更新失败", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
     /**
@@ -82,6 +85,28 @@ export class UserService {
             return rolesRes.roles.map((item) => item.roleId)
         } catch (e) {
             throw new HttpException("系统错误", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    /**
+     * 更新用户信息（及角色状态）
+     * @param updateUserDto
+     */
+    async updateUserInfoOrRoles(updateUserDto: UpdateUserDto) {
+        try {
+            // 更新用户信息
+            const user = new User()
+            user.id = updateUserDto.id
+            user.userName = updateUserDto.userName
+            user.nikeName = updateUserDto.nikeName
+            user.roles = [
+                {
+                    roleId: Number(updateUserDto.roleIds[0]),
+                },
+            ]
+            await this.userRepository.save(user)
+        } catch (e) {
+            throw new HttpException(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 }

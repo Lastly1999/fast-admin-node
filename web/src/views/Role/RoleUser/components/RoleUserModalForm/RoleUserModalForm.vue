@@ -8,7 +8,7 @@ import { ValidateErrorEntity } from "ant-design-vue/es/form/interface"
 import { getSystemUserRoles } from "@/services/user/user"
 
 import type { PropType } from 'vue'
-import type { RoleItem } from "@/store/modules/system"
+import { RoleItem } from "@/store/modules/system"
 
 
 export type UserForm = {
@@ -18,9 +18,16 @@ export type UserForm = {
   passWord?: string;
   nikeName: string;
   roleIds?: string[];
+  roles: RoleInfo[]
   roleId: string | null;
   CreatedAt: string;
   UpdatedAt: string;
+}
+
+export type RoleInfo = {
+  describe?: string;
+  roleId: number;
+  roleName: string;
 }
 
 export type SelectValue = {
@@ -60,17 +67,15 @@ const emit = defineEmits<{
 }>()
 
 watch(() => props.form.id, () => {
-  if (props.form.id) {
-    getRoles(props.form.id)
-  }
+  if (props.form.id) console.log(props.form)
 }, { deep: true })
 
-const getRoles = async (id: number) => {
-  const { code, data } = await getSystemUserRoles(id)
-  if (code === 200) {
-    roles.value = data
-  }
-}
+// const getRoles = async (id: number) => {
+//   const { code, data } = await getSystemUserRoles(id)
+//   if (code === 200) {
+//     roles.value = data
+//   }
+// }
 const roles = ref<RoleItem[]>([])
 
 const storeRoles = computed<RoleItem[]>(() => store.getters["systemModule/getSysRoles"])
@@ -78,16 +83,17 @@ const storeRoles = computed<RoleItem[]>(() => store.getters["systemModule/getSys
 const userFormRef = ref()
 
 const rolesChange = (key: string[], item: SelectValue[]) => {
+  console.log(item)
   // 序列化
-  const sync: RoleItem[] = []
+  const sync: RoleInfo[] = []
   // 参数转换
   item.map(item => {
     sync.push({
-      roleId: item.value,
-      roleName: item.label
+      roleId: Number(item.value),
+      roleName: item.label as string
     })
   })
-  roles.value = sync
+  props.form.roles = sync
   if (!roles.value.find(item => item.roleId === props.form.roleId)) {
     props.form.roleId = null
   }
@@ -123,7 +129,14 @@ const rules = {
 </script>
 
 <template>
-  <FModal :destroyOnClose="true" v-model:value="visible" v-model:title="title" :confirm-loading="loading" @ok="onSubmit" :afterClose="modalCancel">
+  <FModal
+    :destroyOnClose="true"
+    v-model:value="visible"
+    v-model:title="title"
+    :confirm-loading="loading"
+    @ok="onSubmit"
+    :afterClose="modalCancel"
+  >
     <a-form ref="userFormRef" :model="form" :rules="rules" layout="vertical">
       <a-form-item v-if="form.id" label="用户序号" name="pId">
         <a-input disabled v-model:value="form.id" placeholder="请输入" />
@@ -138,21 +151,36 @@ const rules = {
         <a-input v-model:value="form.passWord" placeholder="请输入" />
       </a-form-item>
       <a-form-item label="角色设置" name="roleIds">
-        <a-select v-model:value="form.roleIds" style="width: 100%" mode="multiple" placeholder="请先配置我" option-label-prop="label" @change="rolesChange">
-          <a-select-option v-for="item in storeRoles" :value="item.roleId" :label="item.roleName">&nbsp;&nbsp;{{ item.roleName }}</a-select-option>
+        <a-select
+          v-model:value="form.roleIds"
+          style="width: 100%"
+          mode="multiple"
+          placeholder="请先配置我"
+          option-label-prop="label"
+          @change="rolesChange"
+        >
+          <a-select-option
+            v-for="item in storeRoles"
+            :value="item.roleId"
+            :label="item.roleName"
+          >&nbsp;&nbsp;{{ item.roleName }}</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="默认角色" name="roleId">
-        <a-select notFoundContent="请先配置角色" v-model:value="form.roleId" style="width: 100%" placeholder="暂无配置角色" option-label-prop="label">
-          <a-select-option v-for="item in roles" :value="item.roleId" :label="item.roleName">&nbsp;&nbsp;{{ item.roleName }}</a-select-option>
+        <a-select
+          notFoundContent="请先配置角色"
+          v-model:value="form.roleId"
+          style="width: 100%"
+          placeholder="暂无配置角色"
+          option-label-prop="label"
+        >
+          <a-select-option
+            v-for="item in form.roles"
+            :value="String(item.roleId)"
+            :label="item.roleName"
+          >&nbsp;&nbsp;{{ item.roleName }}</a-select-option>
         </a-select>
       </a-form-item>
-      <!-- <a-form-item v-if="form.id" label="创建时间" name="CreatedAt">
-        <a-input disabled v-model:value="form.CreatedAt" placeholder="请输入" />
-      </a-form-item>
-      <a-form-item v-if="form.id" label="更新时间" name="UpdatedAt">
-        <a-input disabled v-model:value="form.UpdatedAt" placeholder="请输入" />
-      </a-form-item>-->
     </a-form>
   </FModal>
 </template>
