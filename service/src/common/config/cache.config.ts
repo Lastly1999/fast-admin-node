@@ -1,6 +1,6 @@
 export default {
-    port: ,
-    host: ,
+    port: "",
+    host: "",
     password: "",
     db: 0,
 }
