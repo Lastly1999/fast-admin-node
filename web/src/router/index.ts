@@ -11,8 +11,11 @@ import routesStoreModules from "./modules"
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 
+import useSysCommonStore from "@/stores/useSysCommonStore"
+import useAuthStore from "@/stores/useAuthStore"
+
 // vuex
-import store from '@/store'
+// import store from '@/store'
 
 // 路由白名单表
 const routerAuthList = ["HOME:PANEL:VIEW"]
@@ -69,13 +72,20 @@ router.beforeEach(async (to: RouteLocationNormalized, form: RouteLocationNormali
     if (to.path === '/login') {
         next()
     } else {
-        const menus = store.getters["authModule/getSysMenus"]
+
+        const sysCommonStore = useSysCommonStore()
+        const authStore = useAuthStore()
+        // const menus = store.getters["authModule/getSysMenus"]
+        const menus = sysCommonStore.getSysMenus
         if (!menus || menus.length === 0) {
-            await store.dispatch("systemModule/API_GET_SYS_ROLES")
-            await store.dispatch("authModule/API_GET_SYS_MENUS") // 全部系统菜单
-            await store.dispatch("authModule/API_GET_SYS_USER_INFO") // 系统用户信息
-            // 白名单列表
-            const whiteList: string[] = store.getters["authModule/getWhiteList"]
+            await sysCommonStore.apiGetSysRoles()
+            await sysCommonStore.apiGetSysMenus()
+            await authStore.getSystemUserInfo()
+            // await store.dispatch("systemModule/API_GET_SYS_ROLES")
+            // await store.dispatch("authModule/API_GET_SYS_MENUS") // 全部系统菜单
+            // await store.dispatch("authModule/API_GET_SYS_USER_INFO") // 系统用户信息
+            // // 白名单列表
+            // const whiteList: string[] = store.getters["authModule/getWhiteList"]
             // if (whiteList.findIndex(item => item === to.path) === -1) {
             //     next('/notAuth')
             // }

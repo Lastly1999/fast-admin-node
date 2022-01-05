@@ -4,7 +4,7 @@ import { RedisCacheService } from "../redis-cache/redis-cache.service"
 
 @Injectable()
 export class ToolsService {
-    constructor(private readonly redisCacheService: RedisCacheService) {}
+    constructor(private readonly redisCacheService: RedisCacheService) { }
 
     /**
      * 生成图形验证码

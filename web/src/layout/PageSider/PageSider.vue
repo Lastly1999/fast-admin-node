@@ -1,23 +1,21 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useStore } from 'vuex'
 import { Layout } from 'ant-design-vue'
 import config from "@/config/system.config"
-
-// types
 import type { SystemTheme } from '@/store/modules/config'
-
-// layout tools
 import NavMenu from '@/components/NavMenu/NavMenu.vue'
+import useSysCommonStore from "@/stores/useSysCommonStore"
+import useSysConfigStore from "@/stores/useSysConfigStore"
+
 const Sider = Layout.Sider
+const sysCommonStore = useSysCommonStore()
 
-const store = useStore()
-const roleMenus = store.getters['authModule/getSysMenus']
+const sysConfigStore = useSysConfigStore()
 
-// 系统cache的主题配置
-const systemTheme = computed<SystemTheme>(() => store.getters["configModule/getSystemTheme"])
+const roleMenus = sysCommonStore.getSysMenus
 
+const systemTheme = computed<SystemTheme>(() => sysConfigStore.getSystemTheme)
 </script>
 
 <template>
@@ -26,7 +24,10 @@ const systemTheme = computed<SystemTheme>(() => store.getters["configModule/getS
             <div class="logo-container">
                 <img width="50" height="50" :src="config.logo" />
             </div>
-            <div class="logo-title" :style="{ color: systemTheme === 'light' ? '#333' : '#fff' }">Fast Admin</div>
+            <div
+                class="logo-title"
+                :style="{ color: systemTheme === 'light' ? '#333' : '#fff' }"
+            >Fast Admin</div>
         </div>
         <NavMenu :list="roleMenus" />
     </Sider>

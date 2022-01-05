@@ -1,5 +1,4 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, UseGuards } from "@nestjs/common"
-import { CreateUserDto } from "./dtos/create-user.dto"
 import { UserService } from "./user.service"
 import { UpdateUserDto } from "./dtos/update-user.dto"
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
@@ -32,12 +31,18 @@ export class UserController {
     @ApiOperation({ summary: "修改系统用户信息" })
     @ApiBody({ type: UpdateUserDto })
     async updateUserInfo(@Body() updateUserDto: UpdateUserDto) {
-        return await this.userService.updateUser(updateUserDto)
+        return await this.userService.updateUserInfoOrRoles(updateUserDto)
     }
 
     @Get("role")
     @ApiOperation({ summary: "查询用户角色列表" })
     async getUserRoles(@Req() request: Request) {
         return await this.userService.getUserRoles((request.user as JwtTokenParams).roleId)
+    }
+
+    @Get("role/:userId")
+    @ApiOperation({ summary: "用户id查询权限菜单信息" })
+    async getUserDefRoleInfoById(@Param("userId") userId: string) {
+        // todo
     }
 }
