@@ -9,7 +9,7 @@ import { CreateMenuDto } from "./dtos/create-menu.dto"
 @UseGuards(AuthGuard("jwt"))
 @Controller("menu")
 export class BaseMenuController {
-    constructor(private readonly baseMenuService: BaseMenuService) {}
+    constructor(private readonly baseMenuService: BaseMenuService) { }
 
     @Get("role")
     @ApiOperation({ summary: "获取用户系统菜单" })
@@ -24,6 +24,7 @@ export class BaseMenuController {
     }
 
     @Get("menu/:menuId")
+    @ApiOperation({ summary: "获取系统菜单详情" })
     async getMenuInfo(@Param("menuId") menuId: string) {
         return await this.baseMenuService.findOneMenuInfo(menuId)
     }
@@ -41,6 +42,7 @@ export class BaseMenuController {
     }
 
     @Get("ids/:roleId")
+    @ApiOperation({ summary: "获取系统菜单的id列表" })
     async getMenuRoleIds(@Param("roleId") roleId: string) {
         return await this.baseMenuService.getMenuIdsByRoleId(roleId)
     }
