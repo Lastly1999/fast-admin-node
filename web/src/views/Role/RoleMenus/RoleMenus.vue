@@ -36,10 +36,12 @@ const search = () => {
     console.log(queryForm.value)
     console.log('search')
 }
+
 // query 重置方法
 const reset = () => {
     queryForm.value = { name: '' }
 }
+
 // query 新增方法
 const append = () => {
     menuModalForm.value = {
@@ -55,6 +57,7 @@ const append = () => {
     showMenuTitle.value = "新增根菜单"
     showMenuDrawer.value = true
 }
+
 // 查询组件渲染数据源
 const queryJsonData = reactive<QueryJsonItem[]>([
     {
@@ -64,14 +67,18 @@ const queryJsonData = reactive<QueryJsonItem[]>([
         fun: append
     }
 ])
+
 // 查询的表单
 const queryForm = ref({
     name: ""
 })
+
 // table loading状态
 const menuTableLoading = ref<boolean>(false)
+
 // 表格菜单数据源
 const menuData = ref<[]>([])
+
 // 表格头数据
 const columns = [
     {
@@ -115,12 +122,16 @@ const columns = [
         slots: { customRender: "action" },
     },
 ]
+
 // 系统菜单编辑/新增状态
 const showMenuDrawer = ref(false)
+
 // 系统菜单抽屉名称
 const showMenuTitle = ref("")
+
 // 编辑权限弹窗按钮加载状态
 const menuFormloading = ref(false)
+
 // 系统系统编辑/新增表单
 const menuModalForm = ref<MenuFormOptions>({
     id: 0,
@@ -132,6 +143,7 @@ const menuModalForm = ref<MenuFormOptions>({
     pPath: '',
     pIcon: undefined
 })
+
 // 表格行删除菜单操作
 const removeMenu = async (menuItem: MenuFormOptions) => {
     const { code } = await deleteSystemMenu(menuItem.id)
@@ -140,6 +152,7 @@ const removeMenu = async (menuItem: MenuFormOptions) => {
         await getRoleMenus()
     }
 }
+
 // 请求权限菜单数据源
 const getRoleMenus = async () => {
     const { code, data } = await getAllSysMenus()
@@ -147,8 +160,10 @@ const getRoleMenus = async () => {
         menuData.value = listToTree(data)
     }
 }
+
 // 列表添加子菜单按钮方法
 const appendChildren = (data: MenuListItem) => {
+    console.log(data)
     menuModalForm.value = {
         id: data.id,
         icon: data.icon,
@@ -159,15 +174,17 @@ const appendChildren = (data: MenuListItem) => {
     showMenuTitle.value = "添加子菜单"
     showMenuDrawer.value = true
 }
+
 // modal 权限菜单修改提交
 const formSubmit = async (form: MenuFormOptions) => {
+    console.log(form)
     menuFormloading.value = true
     const params: MenuInfo = {
-        menuName: form.id ? form.pName : form.name,
-        menuIcon: form.icon,
-        menuPath: form.id ? form.pPath : form.path,
-        menuParentId: form.id,
-        menuParentName: form.pName
+        name: form.id ? form.pName : form.name,
+        icon: form.icon,
+        path: form.id ? form.pPath : form.path,
+        parentId: form.id,
+        pName: form.pName
     }
     const { code } = await putSystemMenu(params)
     if (code === 200) {

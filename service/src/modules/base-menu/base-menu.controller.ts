@@ -1,9 +1,10 @@
-import { Controller, Get, Param, Req, UseGuards } from "@nestjs/common"
+import { Controller, Get, Param, Put, Req, UseGuards, Body, Delete } from "@nestjs/common"
 import { ApiOperation } from "@nestjs/swagger"
 import { Request } from "express"
 import { BaseMenuService } from "./base-menu.service"
 import { JwtTokenParams } from "../auth/jwt.strategy"
 import { AuthGuard } from "@nestjs/passport"
+import { CreateMenuDto } from "./dtos/create-menu.dto"
 
 @UseGuards(AuthGuard("jwt"))
 @Controller("menu")
@@ -26,6 +27,18 @@ export class BaseMenuController {
     @ApiOperation({ summary: "获取系统菜单详情" })
     async getMenuInfo(@Param("menuId") menuId: string) {
         return await this.baseMenuService.findOneMenuInfo(menuId)
+    }
+
+    @Put("menu")
+    @ApiOperation({ summary: "创建系统菜单" })
+    async putSysMenu(@Body() createMenuDto: CreateMenuDto) {
+        return await this.baseMenuService.createSysMenu(createMenuDto)
+    }
+
+    @Delete("menu/:menuId")
+    @ApiOperation({ summary: "删除系统菜单" })
+    async removeSysMenu(@Param("menuId") menuId: string) {
+        return await this.baseMenuService.deleteSysMenuById(menuId)
     }
 
     @Get("ids/:roleId")

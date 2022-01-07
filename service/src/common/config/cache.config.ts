@@ -1,5 +1,5 @@
 export default {
-    port: "",
+    port: 6379,
     host: "",
     password: "",
     db: 0,

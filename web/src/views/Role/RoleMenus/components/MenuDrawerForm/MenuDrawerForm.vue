@@ -33,11 +33,11 @@ const emit = defineEmits<{
 
 const rules = {
     id: [{ required: true, message: '无根菜单id' }],
-    label: [{ required: true, message: '请输入' }],
+    name: [{ required: true, message: '请输入' }],
     icon: [{ required: true, message: '请选择' }],
     path: [{ required: true, message: '请输入' }],
     pName: [{ required: true, message: ' 请输入' }],
-    pId: [{ required: true, message: '请输入' }],
+    parentId: [{ required: true, message: '请输入' }],
     pPath: [{ required: true, message: '请输入' }],
     pIcon: [{ required: true, message: '清选择' }],
 };
@@ -55,7 +55,6 @@ const onSubmit = () => {
         })
 }
 
-
 </script>
 
 <template>
@@ -71,17 +70,17 @@ const onSubmit = () => {
                     </a-form-item>
                 </a-col>
                 <a-col :span="12">
-                    <a-form-item label="根序号" name="pId">
-                        <a-input disabled v-model:value="form.pId" placeholder="请输入" />
+                    <a-form-item label="根序号" name="parentId">
+                        <a-input disabled v-model:value="form.parentId" placeholder="请输入" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row :gutter="16">
                 <a-col :span="12">
-                    <a-form-item label="根菜单名称" name="label">
+                    <a-form-item label="根菜单名称" name="name">
                         <a-input
                             :disabled="!!form.id"
-                            v-model:value="form.label"
+                            v-model:value="form.name"
                             placeholder="请输入"
                         />
                     </a-form-item>

@@ -30,11 +30,11 @@ export interface RolePermissionParam {
 }
 
 export type MenuInfo = {
-    menuName?: string;
-    menuIcon?: string | null;
-    menuPath?: string;
-    menuParentId?: number;
-    menuParentName?: string;
+    name?: string;
+    icon?: string | null;
+    path?: string;
+    parentId?: number;
+    pName?: string;
 }
 
 export type ApiLogsParams = {
