@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
 import { alertMsg } from '../antd/antd'
-import router from "@/router"
 import type { HttpResponse } from "@/services/model/request/public"
 
 // axios instance

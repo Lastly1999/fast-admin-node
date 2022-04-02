@@ -1,4 +1,4 @@
-import { Like, Repository, EntityRepository } from "typeorm"
+import { Repository, EntityRepository } from "typeorm"
 import { SysIcon } from "./entitys/sys-icon.entitys"
 
 @EntityRepository(SysIcon)

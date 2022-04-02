@@ -27,5 +27,5 @@ const httpRequest = <T>(options: HttpRequestOptions<T>): Promise<any> => {
         })
     })
 }
-
+    
 export default httpRequest

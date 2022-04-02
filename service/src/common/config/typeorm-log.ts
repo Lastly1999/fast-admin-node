@@ -2,15 +2,15 @@ import { Logger as Nestlogger } from "@nestjs/common"
 import { Logger, QueryRunner } from "typeorm"
 
 export class MyCustomLogger implements Logger {
-    log(level: "log" | "info" | "warn", message: any, queryRunner?: QueryRunner): any {
+    log(_level: "log" | "info" | "warn", message: any, _queryRunner?: QueryRunner): any {
         Nestlogger.log(message, "TypeORMLog")
     }
 
-    logMigration(message: string, queryRunner?: QueryRunner): any {
+    logMigration(message: string, _queryRunner?: QueryRunner): any {
         Nestlogger.log("TypeORMMigration", message)
     }
 
-    logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+    logQuery(query: string, _parameters?: any[], _queryRunner?: QueryRunner): any {
         Nestlogger.log(
             query
                 .toString()
@@ -20,15 +20,15 @@ export class MyCustomLogger implements Logger {
         )
     }
 
-    logQueryError(error: string | Error, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+    logQueryError(error: string | Error, _query: string, _parameters?: any[], _queryRunner?: QueryRunner): any {
         Nestlogger.error(`${error}`, "TypeORMQueryError")
     }
 
-    logQuerySlow(time: number, query: string, parameters?: any[], queryRunner?: QueryRunner): any {
+    logQuerySlow(time: number, query: string, _parameters?: any[], _queryRunner?: QueryRunner): any {
         Nestlogger.warn(`${query};Time:${time}`, "TypeORMQuerySlow")
     }
 
-    logSchemaBuild(message: string, queryRunner?: QueryRunner): any {
+    logSchemaBuild(message: string, _queryRunner?: QueryRunner): any {
         Nestlogger.warn(message, "TypeORMSchemaBuild")
     }
 }
