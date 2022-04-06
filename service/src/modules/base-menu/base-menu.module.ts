@@ -8,5 +8,6 @@ import { BaseMenu } from "./base-menu.entity"
     imports: [TypeOrmModule.forFeature([BaseMenu])],
     providers: [BaseMenuService],
     controllers: [BaseMenuController],
+    exports:[BaseMenuModule]
 })
 export class BaseMenuModule {}

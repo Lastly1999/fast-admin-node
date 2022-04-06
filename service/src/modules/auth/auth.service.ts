@@ -3,10 +3,11 @@ import { FindUserDto } from "./dtos/find-user.dto"
 import { ToolsService } from "../../common/tools/tools.service"
 import { UserService } from "../user/user.service"
 import { JwtService } from "@nestjs/jwt"
+import {BaseMenuService} from "../base-menu/base-menu.service";
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly toolsService: ToolsService, private readonly userService: UserService, private readonly jwtService: JwtService) {}
+    constructor(private readonly baseMenuService:BaseMenuService,private readonly toolsService: ToolsService, private readonly userService: UserService, private readonly jwtService: JwtService) {}
 
     //  验证码redis缓存前缀
     private readonly keyPrefix: string = "mathId"
@@ -35,5 +36,13 @@ export class AuthService {
         const timeOut = 1000 * 60 // 过期时间
         const codeSize = 4 // 图形验证码长度
         return this.toolsService.generateSvgCode(this.keyPrefix, codeSize, timeOut)
+    }
+
+    /**
+     * 获取角色系统授权菜单
+     * @param userId
+     */
+    async getRoleMenus(userId:string){
+        return this.baseMenuService.getUserRoleMenus(userId)
     }
 }
