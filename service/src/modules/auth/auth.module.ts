@@ -10,14 +10,18 @@ import { PassportModule } from "@nestjs/passport"
 import { JwtStrategy } from "./jwt.strategy"
 import { AuthController } from "./auth.controller"
 import { jwtConstants } from "./constants"
+import {BaseMenuModule} from "../base-menu/base-menu.module"
+import {BaseMenuService} from "../base-menu/base-menu.service"
+import {BaseMenu} from "../base-menu/base-menu.entity"
 
 @Module({
     controllers: [AuthController],
-    providers: [AuthService, ToolsService, UserService, JwtStrategy],
+    providers: [AuthService, ToolsService, UserService,BaseMenuService, JwtStrategy],
     exports: [JwtModule],
     imports: [
+        BaseMenuModule,
         UserModule,
-        TypeOrmModule.forFeature([User]),
+        TypeOrmModule.forFeature([User,BaseMenu]),
         PassportModule,
         JwtModule.register({
             secret: jwtConstants.secret,

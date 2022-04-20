@@ -1,7 +1,10 @@
-import { Controller, Post, Get, Patch, Body } from "@nestjs/common"
+import {Controller, Post, Get, Patch, Body, Req, UseGuards} from "@nestjs/common"
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { AuthService } from "./auth.service"
 import { FindUserDto } from "./dtos/find-user.dto"
+import {Request} from "express"
+import { JwtTokenParams } from "./jwt.strategy"
+import {AuthGuard} from "@nestjs/passport";
 
 @Controller("auth")
 @ApiTags("系统权限")
@@ -22,8 +25,9 @@ export class AuthController {
     }
 
     @Get("/menu")
-    async getSystemAuthMenu() {
-        return "auth_menu"
+    @UseGuards(AuthGuard("jwt"))
+    async getSystemAuthMenu(@Req() request:Request) {
+        return this.authService.getRoleMenus((request.user as JwtTokenParams).roleId)
     }
 
     @Get("/menuids")
