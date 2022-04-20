@@ -19,8 +19,8 @@ export class User {
     @Column({ name: "nike_name", comment: "用户昵称" })
     nikeName?: string
 
-    @Column({ name: "role_id", comment: "用户角色id" })
-    roleId: string
+    @Column({ name: "role_id", comment: "用户角色id", nullable: true })
+    roleId?: number
 
     @CreateDateColumn({ name: "create_at" })
     createAt?: Date

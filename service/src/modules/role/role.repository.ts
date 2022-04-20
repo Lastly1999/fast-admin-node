@@ -70,4 +70,11 @@ export class RoleRepository extends Repository<Role> {
     async updateRoleBindMenus(permissionId: number[], roleId: number) {
         // return getConnection().createQueryBuilder("sys_basemenu_roles")
     }
+
+    /**
+     * 查询角色详情
+     */
+    async getRoleInfoById(roleId: string) {
+        return this.manager.getRepository(Role).createQueryBuilder("role").where("role.roleId = :roleId", { roleId }).getOne()
+    }
 }

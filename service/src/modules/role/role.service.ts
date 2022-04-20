@@ -10,6 +10,10 @@ import { UpdateRoleDto } from "./dtos/update-role.dto"
 export class RoleService {
     constructor(@InjectRepository(RoleRepository) private readonly roleRepository: RoleRepository) {}
 
+    async getRoleInfoById(id: string) {
+        return this.roleRepository.getRoleInfoById(id)
+    }
+
     /**
      * 查询全部系统角色(带分页)
      * @param getRoleDto

@@ -16,7 +16,7 @@ export class AuthService {
      * @param findUserDto
      */
     async authLogin(findUserDto: FindUserDto) {
-        const verifyResult = await this.toolsService.verifySvgCode(this.keyPrefix, findUserDto.captchaId, findUserDto.captchaCode)
+        const verifyResult = await this.toolsService.verifySvgCode(this.keyPrefix, findUserDto.codeAuth, findUserDto.code)
         if (!verifyResult) {
             throw new HttpException("验证码错误，请重试", HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -29,7 +29,7 @@ export class AuthService {
 
     /**
      * 生成登录鉴权图形验证码
-     * @return Promise<{cap: string, mathId: string}>
+     * @return Promise<{code: string, codeBase: string}>
      */
     async generateUserSvgCode() {
         const timeOut = 1000 * 60 // 过期时间

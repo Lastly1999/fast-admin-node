@@ -28,6 +28,12 @@ export class RoleController {
         return await this.roleService.findAllRoles()
     }
 
+    @Get("role/:id")
+    @ApiOperation({ summary: "获取系统角色详情" })
+    async getRoleInfoById(@Param("id") id: string) {
+        return await this.roleService.getRoleInfoById(id)
+    }
+
     @Put("role")
     @ApiOperation({ summary: "添加角色" })
     @ApiBody({ type: PutRoleDto })

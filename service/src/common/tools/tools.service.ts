@@ -13,10 +13,10 @@ export class ToolsService {
      * @param ttl 过期时间
      */
     async generateSvgCode(keyName: string, size = 4, ttl: number) {
-        const cap = svgCaptcha.create({width:70,height:25,fontSize:23})
+        const cap = svgCaptcha.create({ width: 100, height: 40, fontSize: 30, noise: 2, ignoreChars: "0o1i" })
         const mathId = Number(Math.random() + Date.now()).toFixed(0)
         await this.redisCacheService.set(keyName + mathId, cap.text, ttl)
-        return { cap: cap.data, captchaId: mathId }
+        return { codeBase: cap.data, code: mathId }
     }
 
     /**

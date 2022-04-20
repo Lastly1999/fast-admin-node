@@ -8,7 +8,7 @@ export class UpdateUserDto {
     readonly userName: string
     @IsNotEmpty({ message: "用户昵称不能为空" })
     readonly nikeName: string
-    readonly roleId: string
+    readonly roleId: number
     readonly roleIds: string[]
     readonly userAvatar: string
 }
